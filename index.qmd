@@ -62,18 +62,66 @@ I download the data directly from the website of Miranda-Agrippino. The two auth
 
 I will study the global specifications, and I will include the following variables:
 ```{r package load2}
-#"INDPRO" <- "Industrial Production"; "PCEPI" <- "PCE Deflator"; "BISREER" <- "BIS Real EER";  "DGS1" <- "1Y Treasury Rate"; "GLOBALRA" <- "Global Risk Aversion"; "EUBDLEV" <- "Leverage EU Global Banks"; "USBANKSL" <- "Leverage US Banks"; "EUBANKSL" <- "Leverage EU Banks"; "GLBINFLALL" <- "Global Inflows All Sectors"; "GLBINFLB" <- "Global Inflows to Banks"; "GLBINFNB" <- "Global Inflows to Non-Banks"; "GLBCREDIT" <- "Global Domestic Credit"; "GLBCREXUS" <- "Global Domestic Credit Ex US"; "GREA" <- "Global Real Economic Activity"; "GREAEXUS" <- "Global Real Economic Activity Ex US"; "NONREVSL" <- "US Total Non-revolving Credit"; 
-"GLOBAL FACTOR 1990-2012" <- "Global Factor"
 library(ggplot2)
+
+domestic_df <- data.frame(data$GLBCREDIT, data$GLBCREXUS, data$NONREVSL)
+names(domestic_df) <- c("Global Domestic Credit", "Global Domestic Credit Ex US", "US Total Non-revolving Credit")
+##########
+ggplot(data=data) + 
+  geom_line(aes(x = `LABEL`, y = GLBCREDIT, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = GLBCREXUS, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = NONREVSL, linetype = "twodash"), na.rm = TRUE, color = "grey") +
+  scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Global Credit Types", labels=c("Global Domestic Credit", "Global Domestic Credit Ex US", "US Total Non-revolving Credit"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  labs(x ="", y="", title= "Global Credit") +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
+inflows_df <- data.frame(data$GLBINFLALL, data$GLBINFLB, data$GLBINFLNB)
+names(inflows_df) <- c("Global Inflows All Sectors", "Global Inflows to Banks", "Global Inflows to Non-Banks")
+#######
+ggplot(data=data) + 
+  geom_line(aes(x = `LABEL`, y = GLBINFLALL, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = GLBINFLB, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = GLBINFLNB, linetype = "twodash"), na.rm = TRUE, color = "grey") +
+  scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Global Inflow Types", labels=c("Global Inflows All Sectors", "Global Inflows to Banks", "Global Inflows to Non-Banks"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  labs(x ="", y="", title= "Global Inflows") +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
+leverage_df <- data.frame(data$EUBDLEV, data$USBANKSL, data$EUBANKSL)
+names(leverage_df) <- c("Leverage EU Global Banks", "Leverage US Banks", "Leverage EU Banks")
+########
+ggplot(data=data) + 
+  geom_line(aes(x = `LABEL`, y = EUBDLEV, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = USBANKSL, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = EUBANKSL, linetype = "twodash"), na.rm = TRUE, color = "grey") +
+  scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Leverage Types", labels=c("Leverage EU Global Banks", "Leverage US Banks", "Leverage EU Banks"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  labs(x ="", y="", title= "Leverage") +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
+activity_df <- data.frame(data$GREA, data$GREAEXUS, data$INDPRO)
+names(activity_df) <- c("Global Real Economic Activity", "Global Real Economic Activity Ex US", "Industrial Production")
+##########
+ggplot(data=data) + 
+  geom_line(aes(x = `LABEL`, y = GREA, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = GREAEXUS, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = INDPRO, linetype = "twodash"), na.rm = TRUE, color = "grey") +
+  scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Production Types", labels=c("Global Real Economic Activity", "Global Real Economic Activity Ex US", "Industrial Production"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  labs(x ="", y="", title= "Production") +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
+factor_df <- data.frame(data$GLOBALF, data$GLOBALRA)
+names(factor_df) <- c("Global Factor", "Global Risk Aversion")
+###############
+ggplot(data=data) + 
+  geom_line(aes(x = `LABEL`, y = GLOBALF, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = GLOBALRA, linetype = "dashed"), na.rm = TRUE, color = "black") +
+  scale_linetype_manual(values=c("solid", "dashed"), name="Risk Types", labels=c("Global Factor", "Global Risk Aversion"), guide = guide_legend(override.aes = list(color = c("blue", "black")))) +
+  labs(x ="", y="", title= "Risk Aversion") +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+```
+```{r package load3}
+#"INDPRO" <- "Industrial Production"; "PCEPI" <- "PCE Deflator"; "BISREER" <- "BIS Real EER";  "DGS1" <- "1Y Treasury Rate"; "GLOBALRA" <- "Global Risk Aversion"; "EUBDLEV" <- "Leverage EU Global Banks"; "USBANKSL" <- "Leverage US Banks"; "EUBANKSL" <- "Leverage EU Banks"; "GLBINFLALL" <- "Global Inflows All Sectors"; "GLBINFLB" <- "Global Inflows to Banks"; "GLBINFLB" <- "Global Inflows to Non-Banks"; "GLBCREDIT" <- "Global Domestic Credit"; "GLBCREXUS" <- "Global Domestic Credit Ex US"; "GREA" <- "Global Real Economic Activity"; "GREAEXUS" <- "Global Real Economic Activity Ex US"; "NONREVSL" <- "US Total Non-revolving Credit"; 
+"GLOBALF" <- "Global Risk Aversion"
 
 # Create a list of variable names for each plot
 leverage_vars <- c(data$USBANKSL, data$EUBANKSL, data$USBDLEV)
 inflows_vars <- c(data$GLBINFLALL, data$GLBINFLNB, data$GLBINFLB)
 domestic_vars <- c(data$GLBCREDIT, data$GLBCREXUS)
 other_vars <- c(data$INDPRO, data$PCEPI, data$BISREER, data$DGS1, data$GLOBALRA, data$EUBDLEV, data$GREA, data$GREAEXUS, data$NONREVSL)
-
-#plot(x=data$LABEL, y=cbind(leverage_vars, inflows_vars, domestic_vars, other_vars))
 ```
+
+# arrange all the plots in a grid and save it to a file
+grid.arrange(plot1, plot2, plot3
 
 # The Model
 
