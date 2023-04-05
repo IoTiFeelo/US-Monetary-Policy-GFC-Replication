@@ -120,8 +120,6 @@ domestic_vars <- c(data$GLBCREDIT, data$GLBCREXUS)
 other_vars <- c(data$INDPRO, data$PCEPI, data$BISREER, data$DGS1, data$GLOBALRA, data$EUBDLEV, data$GREA, data$GREAEXUS, data$NONREVSL)
 ```
 
-# arrange all the plots in a grid and save it to a file
-grid.arrange(plot1, plot2, plot3
 
 # The Model
 
