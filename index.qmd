@@ -6,6 +6,14 @@ execute:
 bibliography: references.bib
 ---
 
+```{css, echo = FALSE}
+.justify {
+text-align: justify !important
+}
+```
+
+::: {.justify}
+
 > **Abstract.** 
 >
 > **Keywords.** proxy svars, impulse responses, U.S. mps
@@ -146,7 +154,7 @@ With:
 # References
 
 
-
+::: 
 
 
 
