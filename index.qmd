@@ -4,6 +4,9 @@ author: "Carbonara without cream"
 execute:
   echo: false
 bibliography: references.bib
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{css, echo = FALSE}
@@ -12,22 +15,51 @@ text-align: justify !important
 }
 ```
 
-::: {.justify}
-
-> **Abstract.** 
+::: justify
+> **Abstract.**
 >
 > **Keywords.** proxy svars, impulse responses, U.S. mps
 
 # Introduction
 
-I replicate Miranda-Agrippino & Rey (2020), Review of Economic Studies. In their paper, the authors jointly evaluate the effects of financial, monetary and real variables, in the U.S. and abroad, following a 1% shock of the Federal Reserve (FED) interest rate. In particular, the authors rely on an instrumental variable to identify U.S. monetary policy shocks. This is to avoid implausible restrictions on their variable of interest. 
-My task will be to understand the model of these two scholars and replicate it with simplifications given the time scope of the Macroeconometrics course taught by Dr. [Tomasz Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak). The specific challenge will be writing R codes to disentangle their framework.
+I replicate Miranda-Agrippino & Rey (2020), Review of Economic Studies.
+In their paper, the authors jointly evaluate the effects of financial,
+monetary and real variables, in the U.S. and abroad, following a 1%
+shock of the Federal Reserve (FED) interest rate. In particular, the
+authors rely on an instrumental variable to identify U.S. monetary
+policy shocks. This is to avoid implausible restrictions on their
+variable of interest. My task will be to understand the model of these
+two scholars and replicate it with simplifications given the time scope
+of the Macroeconometrics course taught by Dr. [Tomasz
+Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak).
+The specific challenge will be writing R codes to disentangle their
+framework.
 
 # The Paper
 
 ## Global Factor in Risky Asset Prices
 
-[Miranda-Agrippino and Rey](http://helenerey.eu/Content/_Documents/MirandaAgrippinoRey_REStud_Final.pdf) in the first part of the paper estimate a global factor to proxy the movement of world risky asset prices. They do so by collecting 858 prices of different risky assets traded in North America, Latin America, Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is to pick a representative market index (i.e. S&P 500) for each market at the end of 2012, including all of its components, selecting prices that allow them to cover at least 80% of cross sectional observations by 1990 and 95% in 1995. They do so to avoid over-representation of each category. With this global factor, they can explain over 20% of global risky asset price volatility in their time span. Given the small time frame and VAR analysis limitations, they estimate a global factor with commodities from the U.S., Europe, and Japan, spanning back to 1975. This factor covers 60% of the volatility in this period.  The appendix of the paper provides detailed information on this VAR estimation. To provide more intuition on this factor, the authors correlate it with some indexes of implied volatility such as the VIX, outlining its co-movement with common measures of market variation (in this case a negative correlation). The global factor will be used later in the impulse-response section.
+[Miranda-Agrippino and
+Rey](http://helenerey.eu/Content/_Documents/MirandaAgrippinoRey_REStud_Final.pdf)
+in the first part of the paper estimate a global factor to proxy the
+movement of world risky asset prices. They do so by collecting 858
+prices of different risky assets traded in North America, Latin America,
+Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is
+to pick a representative market index (i.e. S&P 500) for each market at
+the end of 2012, including all of its components, selecting prices that
+allow them to cover at least 80% of cross sectional observations by 1990
+and 95% in 1995. They do so to avoid over-representation of each
+category. With this global factor, they can explain over 20% of global
+risky asset price volatility in their time span. Given the small time
+frame and VAR analysis limitations, they estimate a global factor with
+commodities from the U.S., Europe, and Japan, spanning back to 1975.
+This factor covers 60% of the volatility in this period. The appendix of
+the paper provides detailed information on this VAR estimation. To
+provide more intuition on this factor, the authors correlate it with
+some indexes of implied volatility such as the VIX, outlining its
+co-movement with common measures of market variation (in this case a
+negative correlation). The global factor will be used later in the
+impulse-response section.
 
 ```{r package load}
 #| echo: false
@@ -52,23 +84,51 @@ ggplot() +
   geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1990-2012`, linetype = "twodash"), color="blue4", na.rm = TRUE) +
   geom_line(data = data, aes(x = LABEL, y = VIX, linetype = "dotted"), color="black", na.rm = TRUE) +
   scale_linetype_manual(values=c("solid", "twodash", "dotted"), name="Global Factors", 
-                        labels=c("GF 1990-2012", "GF 1975-2012", "VIX")) +
+                        labels=c("VIX", "GF 1975-2010", "GF 1990-2012")) +
   labs(x ="", y="", title= "Global Factor for Risky Asset Prices") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
+
 ```
 
 ## Proxy-VAR Analysis with Rich-Information Bayesian VAR
-In this project, I will avoid the computation of the global factor, because it is out of scope of the Macroeconomerics subject. Instead, I will concentrate on the Bayesian VAR analysis of Miranda-Agrippino and Rey.
-A main reason why the authors studied the monetary effects of U.S. interest rate changes is that the dollar is the currency of global banking. A change in FED monetary policy affects banks' borrowing capacity, the pricing of dollar denominated assets, and cross-border capital flows.
-In order to isolate its effects, the two scholars identify U.S. monetary policy shocks by exploiting 30-min price revisions around Federal Open Market Committee ([FOMC](https://www.federalreserve.gov/monetarypolicy/fomc.htm)) announcements in the fourth federal funds futures contracts ([FF4](https://www.investopedia.com/terms/f/fed-funds-futures.asp)). The intuition is that these [futures](https://www.investopedia.com/terms/f/futures.asp) have an average maturity of three months, and they can predict revisions of market expectations about future monetary policy one-quarter in advance. This assumption holds only if market participants can distinguish between the systematic component of policy and any observable policy action. Moreover, with asymmetrical information, the FF4 revisions contain information about the influence of economic factors relevant to U.S. monetary policy. Policy announcements provide this information implicitly.
+
+In this project, I will avoid the computation of the global factor,
+because it is out of scope of the Macroeconomerics subject. Instead, I
+will concentrate on the Bayesian VAR analysis of Miranda-Agrippino and
+Rey. A main reason why the authors studied the monetary effects of U.S.
+interest rate changes is that the dollar is the currency of global
+banking. A change in FED monetary policy affects banks' borrowing
+capacity, the pricing of dollar denominated assets, and cross-border
+capital flows. In order to isolate its effects, the two scholars
+identify U.S. monetary policy shocks by exploiting 30-min price
+revisions around Federal Open Market Committee
+([FOMC](https://www.federalreserve.gov/monetarypolicy/fomc.htm))
+announcements in the fourth federal funds futures contracts
+([FF4](https://www.investopedia.com/terms/f/fed-funds-futures.asp)). The
+intuition is that these
+[futures](https://www.investopedia.com/terms/f/futures.asp) have an
+average maturity of three months, and they can predict revisions of
+market expectations about future monetary policy one-quarter in advance.
+This assumption holds only if market participants can distinguish
+between the systematic component of policy and any observable policy
+action. Moreover, with asymmetrical information, the FF4 revisions
+contain information about the influence of economic factors relevant to
+U.S. monetary policy. Policy announcements provide this information
+implicitly.
 
 ## The Data
-I download the data directly from the website of Miranda-Agrippino. The two authors study the consequences of a 1% increase in the U.S. monetary policy considering:
--a domestic VAR with the effects on domestic financial markets and macroeconomic aggregates;
--a global VAR with the effects on global asset markets, global domestic credit and international capital flows;
--a "floaters" VAR to study if a fixed or pegged exchange rate affects the global contraction.
 
-I will study the global specifications, and I will include the following variables:
+I download the data directly from the website of Miranda-Agrippino. The
+two authors study the consequences of a 1% increase in the U.S. monetary
+policy considering: -a domestic VAR with the effects on domestic
+financial markets and macroeconomic aggregates; -a global VAR with the
+effects on global asset markets, global domestic credit and
+international capital flows; -a "floaters" VAR to study if a fixed or
+pegged exchange rate affects the global contraction.
+
+I will study the global specifications, and I will include the following
+variables:
+
 ```{r package load2}
 library(ggplot2)
 
@@ -117,6 +177,7 @@ ggplot(data=data) +
   labs(x ="", y="", title= "Risk Aversion") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 ```
+
 ```{r package load3}
 #"INDPRO" <- "Industrial Production"; "PCEPI" <- "PCE Deflator"; "BISREER" <- "BIS Real EER";  "DGS1" <- "1Y Treasury Rate"; "GLOBALRA" <- "Global Risk Aversion"; "EUBDLEV" <- "Leverage EU Global Banks"; "USBANKSL" <- "Leverage US Banks"; "EUBANKSL" <- "Leverage EU Banks"; "GLBINFLALL" <- "Global Inflows All Sectors"; "GLBINFLB" <- "Global Inflows to Banks"; "GLBINFLB" <- "Global Inflows to Non-Banks"; "GLBCREDIT" <- "Global Domestic Credit"; "GLBCREXUS" <- "Global Domestic Credit Ex US"; "GREA" <- "Global Real Economic Activity"; "GREAEXUS" <- "Global Real Economic Activity Ex US"; "NONREVSL" <- "US Total Non-revolving Credit"; 
 "GLOBALF" <- "Global Risk Aversion"
@@ -128,34 +189,39 @@ domestic_vars <- c(data$GLBCREDIT, data$GLBCREXUS)
 other_vars <- c(data$INDPRO, data$PCEPI, data$BISREER, data$DGS1, data$GLOBALRA, data$EUBDLEV, data$GREA, data$GREAEXUS, data$NONREVSL)
 ```
 
-
 # The Model
 
 ## BVAR Framework
+
 From Herwatz, Rohloff & Wang(2022) I define the model as:
 \begin{gather} \label{eq:solve}
 y_t=\gamma+A_1y_{t-1}+\dots+A_py_{t-p}+u_t \\
 y_t=\gamma+A_1y_{t-1}+\dots+A_py_{t-p}+B\varepsilon_t,&\:\:\:\:\: t=1,\dots,T \end{gather}
-where $A_j, : j=1,2,\dots,p$ are a K x K coefficient matrices, and $u_t$ in the first reduced form is serially uncorrelated with zero mean and positive definite (non-diagonal) covariance matrix $\Sigma_u.$
-The structural shocks $\varepsilon_t$ in the second reduced form assumed to be mutually uncorrelated and normalised to have unit variance. $\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks are mapped to the reduced-form system through a K x K non-singular matrix $B$, such that $BB^{'}=\Sigma_u$. For simplicity, the process is assumed to be causal and $detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for $\left| z \right|\le 1$. This ensures that the process has a Wold moving average MA representation. Moreover,
+where $A_j, : j=1,2,\dots,p$ are a K x K coefficient matrices, and $u_t$
+in the first reduced form is serially uncorrelated with zero mean and
+positive definite (non-diagonal) covariance matrix $\Sigma_u.$ The
+structural shocks $\varepsilon_t$ in the second reduced form assumed to
+be mutually uncorrelated and normalised to have unit variance.
+$\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks
+are mapped to the reduced-form system through a K x K non-singular
+matrix $B$, such that $BB^{'}=\Sigma_u$. For simplicity, the process is
+assumed to be causal and $detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$
+for $\left| z \right|\le 1$. This ensures that the process has a Wold
+moving average MA representation. Moreover,
 
+```{=tex}
 \begin{align*}
 y_t=\mu+\sum_{i=0}^{\infty}\Phi_iu_{t-i}=\mu+\sum_{i=0}^{\infty}\Phi_iB\varepsilon_{t-i}=
 \mu+\sum_{i=0}^{\infty}\Theta_i\varepsilon_{t-i}.
 \end{align*}
-
-With:
-\begin{gather}
+```
+With: \begin{gather}
 \mu=A(1)^{-1}\nu, ::: \Phi_0=I_K, \ \Phi_i=\sum_{j=1}^{i}A_j\Phi_{i-j}, ::: A_j=0 :for: j>p
 \end{gather}
+
+
 
 # My Coding Interpretation
 
 # References
-
-
-::: 
-
-
-
-
+:::
