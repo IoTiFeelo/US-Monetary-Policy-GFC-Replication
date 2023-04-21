@@ -1,6 +1,6 @@
 ---
 title: "A Proxy-SVAR Reproduction Model"
-author: "Carbonara without cream"
+author: "Carbonara without Cream"
 execute:
   echo: false
 bibliography: references.bib
