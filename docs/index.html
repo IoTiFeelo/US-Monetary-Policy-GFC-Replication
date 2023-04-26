@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carbonara without Cream">
+
+<title>Macroeconometrics Research Report - A Proxy-SVAR Reproduction Model</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Macroeconometrics Research Report</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A Proxy-SVAR Reproduction Model</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carbonara without Cream </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<style type="text/css">
+.justify {
+text-align: justify !important
+}
+</style>
+</div>
+<div class="justify">
+<blockquote class="blockquote">
+<p><strong>Abstract.</strong></p>
+<p><strong>Keywords.</strong> proxy svars, impulse responses, U.S. mps</p>
+</blockquote>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>I replicate Miranda-Agrippino &amp; Rey (2020), Review of Economic Studies. In their paper, the authors jointly evaluate the effects of financial, monetary and real variables, in the U.S. and abroad, following a 1% shock of the Federal Reserve (FED) interest rate. In particular, the authors rely on an instrumental variable to identify U.S. monetary policy shocks. This is to avoid implausible restrictions on their variable of interest. My task will be to understand the model of these two scholars and replicate it with simplifications given the time scope of the Macroeconometrics course taught by Dr.&nbsp;<a href="https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak">Tomasz Woźniak</a>. The specific challenge will be writing R codes to disentangle their framework.</p>
+</section>
+<section id="the-paper" class="level1">
+<h1>The Paper</h1>
+<section id="global-factor-in-risky-asset-prices" class="level2">
+<h2 class="anchored" data-anchor-id="global-factor-in-risky-asset-prices">Global Factor in Risky Asset Prices</h2>
+<p><a href="http://helenerey.eu/Content/_Documents/MirandaAgrippinoRey_REStud_Final.pdf">Miranda-Agrippino and Rey</a> in the first part of the paper estimate a global factor to proxy the movement of world risky asset prices. They do so by collecting 858 prices of different risky assets traded in North America, Latin America, Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is to pick a representative market index (i.e.&nbsp;S&amp;P 500) for each market at the end of 2012, including all of its components, selecting prices that allow them to cover at least 80% of cross sectional observations by 1990 and 95% in 1995. They do so to avoid over-representation of each category. With this global factor, they can explain over 20% of global risky asset price volatility in their time span. Given the small time frame and VAR analysis limitations, they estimate a global factor with commodities from the U.S., Europe, and Japan, spanning back to 1975. This factor covers 60% of the volatility in this period. The appendix of the paper provides detailed information on this VAR estimation. To provide more intuition on this factor, the authors correlate it with some indexes of implied volatility such as the VIX, outlining its co-movement with common measures of market variation (in this case a negative correlation). The global factor will be used later in the impulse-response section.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.1.3</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/package load-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="proxy-var-analysis-with-rich-information-bayesian-var" class="level2">
+<h2 class="anchored" data-anchor-id="proxy-var-analysis-with-rich-information-bayesian-var">Proxy-VAR Analysis with Rich-Information Bayesian VAR</h2>
+<p>In this project, I will avoid the computation of the global factor, because it is out of scope of the Macroeconomerics subject. Instead, I will concentrate on the Bayesian VAR analysis of Miranda-Agrippino and Rey. A main reason why the authors studied the monetary effects of U.S. interest rate changes is that the dollar is the currency of global banking. A change in FED monetary policy affects banks’ borrowing capacity, the pricing of dollar denominated assets, and cross-border capital flows. In order to isolate its effects, the two scholars identify U.S. monetary policy shocks by exploiting 30-min price revisions around Federal Open Market Committee (<a href="https://www.federalreserve.gov/monetarypolicy/fomc.htm">FOMC</a>) announcements in the fourth federal funds futures contracts (<a href="https://www.investopedia.com/terms/f/fed-funds-futures.asp">FF4</a>). The intuition is that these <a href="https://www.investopedia.com/terms/f/futures.asp">futures</a> have an average maturity of three months, and they can predict revisions of market expectations about future monetary policy one-quarter in advance. This assumption holds only if market participants can distinguish between the systematic component of policy and any observable policy action. Moreover, with asymmetrical information, the FF4 revisions contain information about the influence of economic factors relevant to U.S. monetary policy. Policy announcements provide this information implicitly.</p>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
+<p>I download the data directly from the website of Miranda-Agrippino. The two authors study the consequences of a 1% increase in the U.S. monetary policy considering: -a domestic VAR with the effects on domestic financial markets and macroeconomic aggregates; -a global VAR with the effects on global asset markets, global domestic credit and international capital flows; -a “floaters” VAR to study if a fixed or pegged exchange rate affects the global contraction.</p>
+<p>I will study the global specifications, and I will include the following variables:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/package load2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/package load2-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/package load2-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/package load2-4.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/package load2-5.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+
+</div>
+</section>
+</section>
+<section id="the-model" class="level1">
+<h1>The Model</h1>
+<section id="bvar-framework" class="level2">
+<h2 class="anchored" data-anchor-id="bvar-framework">BVAR Framework</h2>
+<p>From Herwatz, Rohloff &amp; Wang(2022) I define the model as: <span class="math display">\[\begin{gather} \label{eq:solve}
+y_t=\gamma+A_1y_{t-1}+\dots+A_py_{t-p}+u_t \\
+y_t=\gamma+A_1y_{t-1}+\dots+A_py_{t-p}+B\varepsilon_t,&amp;\:\:\:\:\: t={1,
+\dots ,T} \end{gather}\]</span> where <span class="math inline">\(A_j, : \left \{j=1,2,\dots,p\right \}\)</span> are a K x K coefficient matrices, and <span class="math inline">\(u_t\)</span> in the first reduced form is serially uncorrelated with zero mean and positive definite (non-diagonal) covariance matrix <span class="math inline">\(\Sigma_u.\)</span> The structural shocks <span class="math inline">\(\varepsilon_t\)</span> in the second reduced form assumed to be mutually uncorrelated and normalised to have unit variance. <span class="math inline">\(\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K\)</span>. Structural shocks are mapped to the reduced-form system through a K x K non-singular matrix <span class="math inline">\(B\)</span>, such that <span class="math inline">\(BB^{'}=\Sigma_u\)</span>. For simplicity, the process is assumed to be causal and <span class="math inline">\(detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0\)</span> for <span class="math inline">\(\left| z \right|\le 1\)</span>. This ensures that the process has a Wold moving average MA representation. Moreover,</p>
+<span class="math display">\[\begin{align*}
+y_t=\mu+\sum_{i=0}^{\infty}\Phi_iu_{t-i}=\mu+\sum_{i=0}^{\infty}\Phi_iB\varepsilon_{t-i}=
+\mu+\sum_{i=0}^{\infty}\Theta_i\varepsilon_{t-i}.
+\end{align*}\]</span>
+<p>With: <span class="math display">\[\begin{gather}
+\mu=A(1)^{-1}\nu, ::: \Phi_0=I_K, \ \Phi_i=\sum_{j=1}^{i}A_j\Phi_{i-j}, ::: A_j=0 :for: j&gt;p
+\end{gather}\]</span>. The second to last MA representation is of particular importance because the structural MA coefficients <span class="math inline">\(\Theta_i=\Phi_iB\)</span> cannot be covered without a proper identification. I will briefly outline the Proxy SVAR approach.</p>
+<p>Let <span class="math inline">\(z_t\)</span> be an external instrument to identify the structural shock of interest <span class="math inline">\(\varepsilon_kt, k\:\epsilon \: \left \{1,\dots, K\right \}\)</span>. <span class="math inline">\(z_t\)</span> has to satisfy the <em>relevant</em> condition <span class="math inline">\(\Xi(\varepsilon_{kt}z_t)=\phi \neq 0\)</span> and the <em>exogeneity</em> condition <span class="math inline">\(\Xi(\varepsilon{lt}z_t)=0, \forall l\:\epsilon\left \{1,\dots, K\right \}\setminus\left \{k\right \}\)</span>.</p>
+</section>
+</section>
+<section id="my-coding-interpretation" class="level1">
+<h1>My Coding Interpretation</h1>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+</section>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
