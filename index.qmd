@@ -1,6 +1,6 @@
 ---
 title: "A Proxy-SVAR Reproduction Model"
-author: "Carbonara without cream"
+author: "Carbonara without Cream"
 execute:
   echo: false
 bibliography: references.bib
@@ -98,6 +98,7 @@ ggplot() +
   geom_line(data = data, aes(x = LABEL, y = VIX, linetype = "dotted"), color="black", na.rm = TRUE) +
   scale_linetype_manual(values=c("solid", "twodash", "dotted"), name="Global Factors", 
                         labels=c("VIX", "GF 1975-2010", "GF 1990-2012")) +
+  guides(linetype = guide_legend(override.aes = list(color = c("black", "blue", "blue4")))) +
   labs(x ="", y="", title= "Global Factor for Risky Asset Prices") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 
@@ -148,6 +149,7 @@ library(ggplot2)
 ggplot(data=data) + 
   geom_line(aes(x = `LABEL`, y = GLBCREDIT, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = GLBCREXUS, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = NONREVSL, linetype = "twodash"), na.rm = TRUE, color = "grey") +
   scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Global Credit Types", labels=c("Global Domestic Credit Ex US", "Global Domestic Credit", "US Total Non-revolving Credit"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  guides(linetype = guide_legend(override.aes = list(color = c("black", "blue", "grey")))) +
   labs(x ="", y="", title= "Global Credit") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5, size = 5), axis.text = element_text(size = 3))
 
@@ -155,6 +157,7 @@ ggplot(data=data) +
 ggplot(data=data) + 
   geom_line(aes(x = `LABEL`, y = GLBINFLALL, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = GLBINFLB, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = GLBINFLNB, linetype = "twodash"), na.rm = TRUE, color = "grey") +
   scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Global Inflow Types", labels=c("Global Inflows to Banks", "Global Inflows All Sectors", "Global Inflows to Non-Banks"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  guides(linetype = guide_legend(override.aes = list(color = c("black", "blue", "grey")))) +
   labs(x ="", y="", title= "Global Inflows") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 
@@ -162,6 +165,7 @@ ggplot(data=data) +
 ggplot(data=data) + 
   geom_line(aes(x = `LABEL`, y = EUBDLEV, linetype = "solid"), na.rm = TRUE, color = "blue") + geom_line(aes(x = `LABEL`, y = USBANKSL, linetype = "dashed"), na.rm = TRUE, color = "black") + geom_line(aes(x = `LABEL`, y = EUBANKSL, linetype = "twodash"), na.rm = TRUE, color = "grey") +
   scale_linetype_manual(values=c("solid", "dashed", "twodash"), name="Leverage Types", labels=c("Leverage US Banks", "Leverage EU Global Banks", "Leverage EU Banks"), guide = guide_legend(override.aes = list(color = c("blue", "black", "grey")))) +
+  guides(linetype = guide_legend(override.aes = list(color = c("black", "blue", "grey")))) +
   labs(x ="", y="", title= "Leverage") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 

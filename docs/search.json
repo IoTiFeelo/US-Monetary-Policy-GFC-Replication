@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "A Proxy-SVAR Reproduction Model",
-    "section": "",
-    "text": "Abstract.\nKeywords. proxy svars, impulse responses, U.S. mps"
-  },
-  {
     "objectID": "index.html#global-factor-in-risky-asset-prices",
     "href": "index.html#global-factor-in-risky-asset-prices",
     "title": "A Proxy-SVAR Reproduction Model",
     "section": "Global Factor in Risky Asset Prices",
-    "text": "Global Factor in Risky Asset Prices\nMiranda-Agrippino and Rey in the first part of the paper estimate a global factor to proxy the movement of world risky asset prices. They do so by collecting 858 prices of different risky assets traded in North America, Latin America, Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is to pick a representative market index (i.e. S&P 500) for each market at the end of 2012, including all of its components, selecting prices that allow them to cover at least 80% of cross sectional observations by 1990 and 95% in 1995. They do so to avoid over-representation of each category. With this global factor, they can explain over 20% of global risky asset price volatility in their time span. Given the small time frame and VAR analysis limitations, they estimate a global factor with commodities from the U.S., Europe, and Japan, spanning back to 1975. This factor covers 60% of the volatility in this period. The appendix of the paper provides detailed information on this VAR estimation. To provide more intuition on this factor, the authors correlate it with some indexes of implied volatility such as the VIX, outlining its co-movement with common measures of market variation (in this case a negative correlation). The global factor will be used later in the impulse-response section."
+    "text": "Global Factor in Risky Asset Prices\nMiranda-Agrippino and Rey in the first part of the paper estimate a global factor to proxy the movement of world risky asset prices. They do so by collecting 858 prices of different risky assets traded in North America, Latin America, Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is to pick a representative market index (i.e. S&P 500) for each market at the end of 2012, including all of its components, selecting prices that allow them to cover at least 80% of cross sectional observations by 1990 and 95% in 1995. They do so to avoid over-representation of each category. With this global factor, they can explain over 20% of global risky asset price volatility in their time span. Given the small time frame and VAR analysis limitations, they estimate a global factor with commodities from the U.S., Europe, and Japan, spanning back to 1975. This factor covers 60% of the volatility in this period. The appendix of the paper provides detailed information on this VAR estimation. To provide more intuition on this factor, the authors correlate it with some indexes of implied volatility such as the VIX, outlining its co-movement with common measures of market variation (in this case a negative correlation). The global factor will be used later in the impulse-response section.\n\n\nWarning: package 'ggplot2' was built under R version 4.1.3"
   },
   {
     "objectID": "index.html#proxy-var-analysis-with-rich-information-bayesian-var",
