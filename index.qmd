@@ -22,7 +22,7 @@ text-align: justify !important
 
 # Introduction
 
-I replicate Miranda-Agrippino & Rey (2020), Review of Economic Studies.
+I replicate @miranda2020us, Review of Economic Studies.
 In their paper, the authors jointly evaluate the effects of financial,
 monetary and real variables, in the U.S. and abroad, following a 1%
 shock of the Federal Reserve (FED) interest rate. In particular, the
