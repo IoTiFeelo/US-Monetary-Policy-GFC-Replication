@@ -188,6 +188,17 @@ ggplot(data=data) +
   labs(x ="", y="", title= "Risk Aversion") +
   theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5))
 ```
+## Integration order verification
+
+```{r integratio order}
+
+glbc_adf = tseries::adf.test(log(data$GLBCREDIT), k = 12)
+glbc_diff_adf = tseries::adf.test(diff(log(data$GLBCREDIT)), k = 11)
+# please use the outputs to create a table reporting test statistic, p-value, the variable (and transformation), lag order. Write a conclusion regarding the integration order.
+```
+
+
+
 
 # The Model
 
