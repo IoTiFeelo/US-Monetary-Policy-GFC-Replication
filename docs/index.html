@@ -21,6 +21,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -124,7 +143,7 @@ text-align: justify !important
 <p><strong>Keywords.</strong> proxy svars, impulse responses, U.S. mps</p>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>I replicate <span class="citation" data-cites="miranda2020us">(<a href="#ref-miranda2020us" role="doc-biblioref"><strong>miranda2020us?</strong></a>)</span>, Review of Economic Studies. In their paper, the authors jointly evaluate the effects of financial, monetary and real variables, in the U.S. and abroad, following a 1% shock of the Federal Reserve (FED) interest rate. In particular, the authors rely on an instrumental variable to identify U.S. monetary policy shocks. This is to avoid implausible restrictions on their variable of interest. My task will be to understand the model of these two scholars and replicate it with simplifications given the time scope of the Macroeconometrics course taught by Dr.&nbsp;<a href="https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak">Tomasz Woźniak</a>. The specific challenge will be writing R codes to disentangle their framework.</p>
+<p>I replicate <span class="citation" data-cites="miranda2020us">Miranda-Agrippino and Rey (<a href="#ref-miranda2020us" role="doc-biblioref">2020</a>)</span>, Review of Economic Studies. In their paper, the authors jointly evaluate the effects of financial, monetary and real variables, in the U.S. and abroad, following a 1% shock of the Federal Reserve (FED) interest rate. In particular, the authors rely on an instrumental variable to identify U.S. monetary policy shocks. This is to avoid implausible restrictions on their variable of interest. My task will be to understand the model of these two scholars and replicate it with simplifications given the time scope of the Macroeconometrics course taught by Dr.&nbsp;<a href="https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak">Tomasz Woźniak</a>. The specific challenge will be writing R codes to disentangle their framework.</p>
 </section>
 <section id="the-paper" class="level1">
 <h1>The Paper</h1>
@@ -320,7 +339,7 @@ y_t=\mu+\sum_{i=0}^{\infty}\Phi_iu_{t-i}=\mu+\sum_{i=0}^{\infty}\Phi_iB_0\vareps
 \]</span></p>
 <p>Moreover, let <span class="math inline">\(\Pi\)</span> denotes the <span class="math inline">\(1\)</span>x<span class="math inline">\(K\)</span> coefficient vector from the regression of the instrument on the residual vector <span class="math inline">\(u_t\)</span> gives the shock <span class="math inline">\(\varepsilon_{kt}\)</span> up to a scale <span class="math inline">\(\phi\)</span>.</p>
 <p><span class="math inline">\(\Pi u_t=\Xi(z_tu^{'}_t)\Sigma_{u}^{-1}u_t=\phi B^{'}_{0,k}\left [B_0B_0^{'} \right ]u_t=\phi e^{'}_t\varepsilon_{kt}\)</span></p>
-<p><span class="citation" data-cites="MollerWolf2021LPVARS">(<a href="#ref-MollerWolf2021LPVARS" role="doc-biblioref"><strong>MollerWolf2021LPVARS?</strong></a>)</span>, exploiting their result that Local Projections and VAR impulse response function are equal up to a constant of proportionality, show that proxy SVARS impulse responses can be computed putting the instrument in the first row of the data vector <span class="math inline">\(y_t\)</span> in a SVAR fraamework. This result follows from invertibility of <span class="math inline">\(\varepsilon\)</span> and two assumptions: -the data <span class="math inline">\(y_t\)</span> is covariance-stationary; -the data <span class="math inline">\(y_t\)</span> is a jointly Gaussian vector time series. In our Bayesian approach these requirements are met when we define the distributions of our error terms. I will outline them in the next section.</p>
+<p><span class="citation" data-cites="MollerWolf2021LPVARS">Plagborg-Moller (<a href="#ref-MollerWolf2021LPVARS" role="doc-biblioref">2021</a>)</span>, exploiting their result that Local Projections and VAR impulse response function are equal up to a constant of proportionality, show that proxy SVARS impulse responses can be computed putting the instrument in the first row of the data vector <span class="math inline">\(y_t\)</span> in a SVAR fraamework. This result follows from invertibility of <span class="math inline">\(\varepsilon\)</span> and two assumptions: -the data <span class="math inline">\(y_t\)</span> is covariance-stationary; -the data <span class="math inline">\(y_t\)</span> is a jointly Gaussian vector time series. In our Bayesian approach these requirements are met when we define the distributions of our error terms. I will outline them in the next section.</p>
 </section>
 <section id="basic-model" class="level2">
 <h2 class="anchored" data-anchor-id="basic-model">Basic Model</h2>
@@ -449,10 +468,16 @@ p(A,\Sigma|X,Y,\kappa_a,\kappa_{\Sigma}) \propto L(A,\Sigma|Y,X) \times p(A|\Sig
 <p><img src="index_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Then, I use my two functions from the basic and extended model to simulate the posterior of the intercept term</p>
+<p>Then, I use my two functions from the basic and extended model to simulate the posterior of the intercept term. I show in the plots that for 10 thousand draws I get an intercept close to zero for the <span class="math inline">\(A_{1,1}\)</span> and <span class="math inline">\(A_{1,2}\)</span> values, and an identity matrix for the <span class="math inline">\(B_{1,1}\)</span> and <span class="math inline">\(B_{2,2}\)</span> values.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Moreover, I also plot the histograms of the values <span class="math inline">\(\kappa_a\)</span> and <span class="math inline">\(\kappa_{\Sigma}\)</span> outlining their mean value. I also add a vertical line to define the mean parameter for all the draws. The initial values for both parameters was set equal to one.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -464,7 +489,15 @@ p(A,\Sigma|X,Y,\kappa_a,\kappa_{\Sigma}) \propto L(A,\Sigma|Y,X) \times p(A|\Sig
 
 
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-miranda2020us" class="csl-entry" role="doc-biblioentry">
+Miranda-Agrippino, Silvia, and H’elene Rey. 2020. <span>“US Monetary Policy and the Global Financial Cycle.”</span> <em>The Review of Economic Studies</em> 87 (6): 2754–76.
+</div>
+<div id="ref-MollerWolf2021LPVARS" class="csl-entry" role="doc-biblioentry">
+Plagborg-Moller, Christian, Mikkel &amp; K. Wolf. 2021. <span>“Local Projections and VARS Estimate the Same Impulse Reponses.”</span> <em>Econometrica</em> 89 (2): 955–80.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

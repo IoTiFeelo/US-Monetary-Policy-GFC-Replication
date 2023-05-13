@@ -368,7 +368,7 @@ $\Pi u_t=\Xi(z_tu^{'}_t)\Sigma_{u}^{-1}u_t=\phi B^{'}_{0,k}\left [B_0B_0^{'} \ri
 and VAR impulse response function are equal up to a constant of
 proportionality, show that proxy SVARS impulse responses can be computed
 putting the instrument in the first row of the data vector $y_t$ in a
-SVAR fraamework. This result follows from invertibility of $\varepsilon$
+SVAR framework. This result follows from the invertibility of $\varepsilon$
 and two assumptions: 
 -the data $y_t$ is covariance-stationary; 
 -the data
