@@ -133,7 +133,13 @@ impulse-response section.
     
   ############################################################
   ############################################################
-  #plot of global factors with VIX
+```
+
+```{r}
+#| echo: true 
+#| message: false
+#| warning: false
+#plot of global factors with VIX
   ggplot() + 
     geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1975-2010`, linetype = "solid"), color ="blue", na.rm = TRUE, linewidth=1.2) + 
     geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1990-2012`, linetype = "twodash"), color="blue4", na.rm = TRUE, linewidth=1.2) +
@@ -453,6 +459,9 @@ with posterior parameters:
 In order to compute our posterior parameters in R, we first specify values for our priors, then we calculate the posteriors and draw $A$ and $\Sigma$ respectively from a Matrix-Variate-normal and Inverse Wishart distributions. 
 
 ```{r}
+#| echo: true 
+#| message: false
+#| warning: false
   # setup function for my analysis
   basic.model <- function(bigy, p, S, start, end){
   ############################################################
@@ -578,6 +587,9 @@ Return the output as $\left \{ A^{(s)}, \Sigma^{(s)} \right \}^{S2}_{s=S1+1}$.
 
 
 ```{r}
+#| echo: true 
+#| message: false
+#| warning: false
   extended.model <- function(bigy, p, S1, S2){
   ############################################################
   
@@ -670,6 +682,9 @@ Return the output as $\left \{ A^{(s)}, \Sigma^{(s)} \right \}^{S2}_{s=S1+1}$.
 
 I generate two random walks $y1$ and $y2$ with 1000 observations each simulated from a bivariate Gaussian random walk process. I plot the raw series and the first difference below:
 ```{r}
+#| echo: true 
+#| message: false
+#| warning: false
   #artificial data with 1000 observations from a bi-variate Gaussian random walk
   #VAR model with N=2, p=1, and a constant term
   # simulate 1000 samples from the bivariate Gaussian random walk process with cumsum(rnorm())
@@ -677,13 +692,16 @@ I generate two random walks $y1$ and $y2$ with 1000 observations each simulated 
   y2 <- ts(cumsum(rnorm(1000, 0, sd=1)))
   y.art <- cbind(y1,y2)
   
-  par(mfrow=c(2,1),mar=c(2,2,2,2))
+  par(mfrow=c(1,2),mar=c(2,2,2,2))
   plot(y.art, 1:1000, type = "l", main = "Artificial data", ylab="", xlab="")
   plot(diff(y.art), 1:1000, type = "l", main = "Artificial data first difference", ylab="", xlab="")
 ```
   
 Then, I use my two functions from the basic and extended model to simulate the posterior of the intercept term. I show in the plots that for 10 thousand draws I get an intercept close to zero for the $A_{1,1}$ and $A_{1,2}$ values, and an identity matrix for the $B_{1,1}$ and $B_{2,2}$ values.
 ```{r}
+#| echo: true 
+#| message: false
+#| warning: false
   basic.artificial <- basic.model(y.art, 1, 10000, c(), c())
   extended.artificial <- extended.model(y.art, 1, 1000, 9000)
   B.basic    <- basic.artificial$B
@@ -700,16 +718,18 @@ Then, I use my two functions from the basic and extended model to simulate the p
   plot(1:10000, B.extended[2,2,], type = "l", main = expression(paste("extended " , B[2,2])), lwd=0.2, ylab="", xlab="", col="blue2")
   plot(1:10000, A.extended[1,1,], type = "l", main = expression(paste("extended " , A[1,1])), lwd=0.2, ylab="", xlab="", col="blue4")
   plot(1:10000, A.extended[1,2,], type = "l", main = expression(paste("extended " , A[1,2])), lwd=0.2, ylab="", xlab="", col="blue4")
-  mtext("Posterior Parameters for Basic and Extended Models", side=3, line=-2, outer = TRUE)
   
 ```
 Moreover, I also plot the histograms of the values $\kappa_a$ and $\kappa_{\Sigma}$ outlining their mean value. I also add a vertical line to define the mean parameter for all the draws. The initial values for both parameters was set equal to one.
 ```{r}
+#| echo: true 
+#| message: false
+#| warning: false
 par(mfrow=c(1,2),mar=c(2,2,2,2))
 hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", main = expression(paste("Slope Hyperparameter ", kappa[a])))
 abline(v = mean(extended.artificial$k.a.convergence), col='blue3', lwd = 3)
 hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis",main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])))
-abline(v = mean(extended.artificial$k.sigma.convergence), col='blue3', lwd = 3)
+abline(v = mean(extended.artificial$k.sigma.convergence), col='red', lwd = 3)
 ```
 # References
 :::
