@@ -10,8 +10,9 @@
   library(MASS)
   #library(gridExtra)
   library(patchwork)
+  library(fredr)
   #rm(list=ls())
-  # fredr_set_key("3330a1a80c13478e9e927a10d2c65c04")
+  fredr_set_key("3330a1a80c13478e9e927a10d2c65c04")
   url <- "http://silviamirandaagrippino.com/s/DFM-Blocks.zip"
   download.file(url, "MAR(2020)")
   unzip("MAR(2020)")
@@ -384,4 +385,8 @@
   }
   
   knitr::kable(cbind(adf, adf.diff), index=TRUE)
-  
+  # USlev.asset    <- fredr_series_observations("BOGZ1FU664090005Q", observation_start = as.Date("1960-01-01"), observation_end = as.Date("2020-12-31"), aggregation_method = "eop", units="pch")
+  # USlev.liab     <- fredr_series_observations("BOGZ1FL664194005Q", observation_start = as.Date("1960-01-01"), observation_end = as.Date("2020-12-31"), aggregation_method = "eop", units="pch")
+  # USlev.leverage <- USlev.asset$value/USlev.liab$value
+  # plot(x=USlev.leverage, y=USlev.asset$value, main="Procyclical Leverage of US Brokers and Dealers", xlab="Leverage Growth (% change)", xlim=c(-40,40), ylab="Total Asset Growth (% change)", ylim=c(-300,200))
+  # 

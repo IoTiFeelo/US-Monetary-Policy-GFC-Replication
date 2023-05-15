@@ -77,8 +77,8 @@ impulse-response section.
   library(MASS)
   #library(gridExtra)
   library(patchwork)
+  library(fredr)
 ##########################################################################################
-  set.seed(23)
 
   url <- "http://silviamirandaagrippino.com/s/DFM-Blocks.zip"
   download.file(url, "MAR(2020)")
@@ -89,10 +89,10 @@ impulse-response section.
   #instrument$LABEL <- date #ts object is not able to translate dates
   gf <- read_excel("GFC_VARdata+WEB.xlsx", sheet= 4, skip=2, .name_repair = "unique_quiet", na = "blank")
   #monthly data for monthly FedFundsRate
-  fed <- (fredr(series_id = "FEDFUNDS", 
-                           observation_start = as.Date("1975-01-01"), 
-                           frequency = "m",
-                           aggregation_method = "average"))
+  # fed <- (fredr(series_id = "FEDFUNDS", 
+  #                          observation_start = as.Date("1975-01-01"), 
+  #                          frequency = "m",
+  #                          aggregation_method = "average"))
   ############################################################
   ############################################################
   #time series of variables 
@@ -148,7 +148,8 @@ impulse-response section.
                           labels=c("VIX", "GF 1975-2010", "GF 1990-2012")) +
     guides(linetype = guide_legend(override.aes = list(color = c("black", "blue", "blue4")))) +
     labs(x ="", y="", title= "Global Factor for Risky Asset Prices") + theme(plot.title = element_text(size=20)) +
-    theme(legend.text = element_text(size=20),legend.title = element_text(size=12, face="bold"),  legend.position = "bottom", plot.title = element_text(hjust = 0.5), panel.border = element_blank(), panel.grid.major = element_blank(),
+    theme(legend.text = element_text(size=20),legend.title = element_text(size=12, face="bold"),  legend.position = "bottom", 
+          plot.title = element_text(hjust = 0.5), panel.border = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),panel.background = element_rect(fill = "white"),
           plot.background = element_rect(fill = "white"), axis.text = element_text(size = 14))
 
@@ -180,7 +181,7 @@ contain information about the influence of economic factors relevant to
 U.S. monetary policy. Policy announcements provide this information
 implicitly.
 
-## The Data
+# The Data
 
 I download the data directly from the website of Miranda-Agrippino. The
 two authors study the consequences of a 1% increase in the U.S. monetary
@@ -277,7 +278,23 @@ fed.gdp.plot <-  (ggplot(data=data) +
   combinedplot.1
   combinedplot.2
 ```
+## Data Description
+Against this backdrop, our interest is to study the degree by which U.S. monetary policy shocks can propagate throughout the economies of the world. In order to have a global picture we study macroeconomic variables that can affect and influence a FED change in the interest rate. The global variables are constructed scrutinizing these countries: Argentina, Australia, Austria, Belarus, Belgium, Bolivia, Brazil, Bulgaria, Canada, Chile, Colombia, Costa Rica, Croatia, Cyprus, Czech Republic, Denmark, Ecuador, Finland, France, Germany, Greece, Hong Kong, Hungary, Iceland, Indonesia, Ireland, Italy, Japan, Latvia, Lithuania, Luxembourg, Malaysia, Malta, Mexico, Netherlands, New Zealand, Norway, Poland, Portugal, Romania, Russia, Serbia, Singapore, Slovakia, Slovenia, South Africa, South Korea, Spain, Sweden, Switzerland, Thailand, Turkey, U.K., and the U.S. 
 
+As discussed in the previous section, I am icìncluding the variables of the global VAR of @miranda2020us.
+In the first graph, I include the following variables:
+-the U.S. industrial production index that measures the real output of all relevant establishments located in the U.S.; 
+-the Bank for International Settlement (BIS) effective exchange rate (EER) for the United States, i.e. a summary measure calculated by the BIS to account for changes in the U.S. bilateral exchange rate against other countries by their trade importance;
+-global inflows, defined as direct cross-border credit flows from the U.S. to the aforementioned countries' banks and non-banks recipients. This variable is key to explain the degree of financial dependency of the rest of the world vis-à-vis the financial hegemon;
+-global domestic credit, another key variable in our VAR that outlines the total amount of funds in the world economy, including loans, debt instruments, and other forms of credit provided by financial institutions.
+
+In the second graph, I outline four types of leverage. First of all, leverage can be defined as the ratio between assets and equity, with equity being the ratio between the difference of assets and debts. In finance, this measurement refers to the use of borrowed funds to finance assets or investments. Against this backdrop, the authors construct this variable as the ratio between claims on private sector, i.e. credit extended by banks and other financial institutions to the private sector, and the sum of transferable deposits held by depository corporations, excluding central banks. This ratio reflects the proportion of credit extended to the private sector relative to the deposits held by depository corporations, excluding central banks. A higher ratio suggests a higher level of leverage in the banking sector. The authors differentiate between different leverages given the contrasting risk-taking behavior of financial agents.
+As a matter of fact, we can observe that the leverage of EU global banks and US brokers and dealers is much higher than the leverage of EU and US. EU global banks include banks that are systematically important such as UBS and Unicredit.
+Global banks' leverage is higher because of several reasons such as size and risk appetite. The behavior of brokers and dealers can be explained by their risk-loving approach, given that a higher total asset growth is correlated with an increase in leverage growth (insert data from Fred). On the other hand, commercial banks tend to have constant leverage growth, notwithstanding their total asset growth (insert graph).
+
+In the third graph, I include the FED policy rate coupled with the global real economic activity index (excluding the US). We can observe the lagged effect of an increase in the interest rate with a decrease in global economic activity. In the fourth graph I include the global factor discussed in the previous section, plotted with the global risk aversion (one variable is the inverse of the other). The factor is rotated to provide an intuitive view that an increase in the factor (risk aversion) reflects an increase in global asset prices. Lastly, I plot the U.S. PCE deflator measuring changes in the price of goods and services over time.
+
+On top of these variables, I will add the aforementioned instrument on top of the $y_t$ variable. In the next section I will provide reason for this procedure. 
 ## Order of Integration of the Variables
 
 I run an augmented Dickey Fuller (ADF) Test to determine the order of
@@ -322,7 +339,7 @@ expectations:
 
 ## BVAR Framework
 
-From Herwatz, Rohloff & Wang(2022) I define the model as: $$
+From @HRW2022ProxySVARs I define the model as: $$
 y_t=B_0B_1y_{t-1}+...+B_0B_py_{t-p}+B_0\varepsilon_t, t=1,..,T $$
 $$y_t=A_1y_{t-1}+...+A_py_{t-p}+u_t$$ where $A_j, : \left \{j=1,2,\dots,p\right \}$ where $A(L)=B_0B(L)$ are a K x K coefficient matrices, and L is the lag
 operator, and $u_t$ in the first reduced form is serially uncorrelated
@@ -702,6 +719,7 @@ Then, I use my two functions from the basic and extended model to simulate the p
 #| echo: true 
 #| message: false
 #| warning: false
+  set.seed(420)
   basic.artificial <- basic.model(y.art, 1, 10000, c(), c())
   extended.artificial <- extended.model(y.art, 1, 1000, 9000)
   B.basic    <- basic.artificial$B
@@ -710,14 +728,14 @@ Then, I use my two functions from the basic and extended model to simulate the p
   A.extended <-extended.artificial$A.convergence
   
   par(mfrow=c(4,2),mar=c(2,2,3,2))
-  plot(1:10000, B.basic[1,1,], type = "l", main = expression(paste("basic " , B[1,1])), lwd=0.2, ylab="", xlab="", col="blue1")
-    plot(1:10000, B.basic[2,2,], type = "l", main = expression(paste("basic " , B[2,2])), lwd=0.2, ylab="", xlab="", col="blue1")
-  plot(1:10000, A.basic[1,1,], type = "l", main = expression(paste("basic " , A[1,1])), lwd=0.2, ylab="", xlab="", col="blue3")
-  plot(1:10000, A.basic[1,2,], type = "l", main = expression(paste("basic " , A[1,2])), lwd=0.2, ylab="", xlab="", col="blue3")
-  plot(1:10000, B.extended[1,1,], type = "l", main = expression(paste("extended " , B[1,1])), lwd=0.2, ylab="", xlab="", col="blue2")
-  plot(1:10000, B.extended[2,2,], type = "l", main = expression(paste("extended " , B[2,2])), lwd=0.2, ylab="", xlab="", col="blue2")
-  plot(1:10000, A.extended[1,1,], type = "l", main = expression(paste("extended " , A[1,1])), lwd=0.2, ylab="", xlab="", col="blue4")
-  plot(1:10000, A.extended[1,2,], type = "l", main = expression(paste("extended " , A[1,2])), lwd=0.2, ylab="", xlab="", col="blue4")
+  plot(1:10000, B.basic[1,1,], type = "l", main = expression(paste("basic " , B[11])), lwd=0.3, ylab="", xlab="", col="royalblue")
+    plot(1:10000, B.basic[2,2,], type = "l", main = expression(paste("basic " , B[22])), lwd=0.3, ylab="", xlab="", col="royalblue")
+  plot(1:10000, A.basic[1,1,], type = "l", main = expression(paste("basic " , A[11])), lwd=0.4, ylab="", xlab="", col="tomato")
+  plot(1:10000, A.basic[1,2,], type = "l", main = expression(paste("basic " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato")
+  plot(1:10000, B.extended[1,1,], type = "l", main = expression(paste("extended " , B[11])), lwd=0.3, ylab="", xlab="", col="royalblue3")
+  plot(1:10000, B.extended[2,2,], type = "l", main = expression(paste("extended " , B[22])), lwd=0.3, ylab="", xlab="", col="royalblue3")
+  plot(1:10000, A.extended[1,1,], type = "l", main = expression(paste("extended " , A[11])), lwd=0.4, ylab="", xlab="", col="tomato3")
+  plot(1:10000, A.extended[1,2,], type = "l", main = expression(paste("extended " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato3")
   
 ```
 Moreover, I also plot the histograms of the values $\kappa_a$ and $\kappa_{\Sigma}$ outlining their mean value. I also add a vertical line to define the mean parameter for all the draws. The initial values for both parameters was set equal to one.
@@ -726,10 +744,10 @@ Moreover, I also plot the histograms of the values $\kappa_a$ and $\kappa_{\Sigm
 #| message: false
 #| warning: false
 par(mfrow=c(1,2),mar=c(2,2,2,2))
-hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", main = expression(paste("Slope Hyperparameter ", kappa[a])))
-abline(v = mean(extended.artificial$k.a.convergence), col='blue3', lwd = 3)
-hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis",main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])))
-abline(v = mean(extended.artificial$k.sigma.convergence), col='red', lwd = 3)
+hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[a])), border=F, xlim=c(0,0.5))
+abline(v = mean(extended.artificial$k.a.convergence), col='purple4', lwd = 2)
+hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis", col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
+abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
 ```
 # References
 :::
