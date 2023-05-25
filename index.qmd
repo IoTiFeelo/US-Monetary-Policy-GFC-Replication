@@ -16,7 +16,6 @@ text-align: justify !important
 ```
 
 ::: justify
-
 **Keywords.** proxy svars, impulse responses, U.S. mps
 
 # Introduction
@@ -456,7 +455,8 @@ the instrument and VAR residuals obtain the k-th column if $B_0$,
 denoted by $B_{0k}$.
 
 $$
-\Xi(u_tz_t) = B_{0,k}\Xi(\varepsilon{kt}z_t)=\phi B_{0,k}
+\Xi(u_tz_t) = B_{0,k} \\
+\Xi(\varepsilon{kt}z_t)=\phi B_{0,k}
 $$
 
 Moreover, let $\Pi$ denotes the $1$x$K$ coefficient vector from the
@@ -509,12 +509,12 @@ With parameters: \begin{gather}
 \\ Var[vec(A)] = \Sigma \otimes  \underline{V} \\
 \\ \underline{V} = diag([\kappa_2 \quad \kappa_1 (p^{-2} \otimes I_N)]) \\
 \\ p = [1,2,...p]
-\end{gather} The parameter $\kappa_2$ and $kappa_1$ specify respectively
-the prior of the overall shrinkage level for the constant term and for
-the autoregressive slopes. I specify $\kappa_2=1$ and $\kappa_1=0.02$
-based on the fact that you should shrink the constant term much less
-than the autoregressive parameters. Furthermore, the full conditional
-posterior is: \begin{gather}
+\end{gather} The parameter $\kappa_2$ and $\kappa_1$ specify
+respectively the prior of the overall shrinkage level for the constant
+term and for the autoregressive slopes. I specify $\kappa_2=1$ and
+$\kappa_1=0.02$ based on the fact that you should shrink the constant
+term much less than the autoregressive parameters. Furthermore, the full
+conditional posterior is: \begin{gather}
 p(A,\Sigma|Y,X) = p(A|Y,X,\Sigma)p(\Sigma|Y,X) \\
 \\ p(A|Y,X,\Sigma) = MN_{K \times N}(\bar{A}, \Sigma, \bar{V}) \\ 
 \\ p(\Sigma | Y, X) = IW_N(\bar{S},\bar{\nu})
@@ -562,8 +562,8 @@ In order to compute our posterior parameters in R, we first specify
 values for our priors, then we calculate the posteriors and draw $A$ and
 $\Sigma$ respectively from a Matrix-Variate-normal and Inverse Wishart
 distributions. At this point, we can obtain our structural parameters
-through a cholesky decomposition of our matrix $$ \Sigma $$, namely with
-$$ \Sigma=(B_0B_0^{'}) $$.
+through a cholesky decomposition of our matrix $ \Sigma $, namely with
+$ \Sigma^{-1}=(B_0B_0^{'}) $.
 
 ```{r}
 #| echo: true 
@@ -621,26 +621,27 @@ $$ \Sigma=(B_0B_0^{'}) $$.
 #| #| message: false
 #| warning: false
   #run the function with my data
-  y = cbind(instrument,
-    log(pce),
-    log(indpro),
-    greaexus, 
-    log(glbinflows),
-    dgs1, 
-    log(bis), 
-    globalf, 
-    globalra, 
-    log(glbcredit), 
-    log(usbdlev), 
-    log(eubdlev), 
-    usbanksl, 
-    eubanksl)
+  # y = cbind(instrument,
+  #   log(pce),
+  #   log(indpro),
+  #   greaexus, 
+  #   log(glbinflows),
+  #   dgs1, 
+  #   log(bis), 
+  #   globalf, 
+  #   globalra, 
+  #   log(glbcredit), 
+  #   log(usbdlev), 
+  #   log(eubdlev), 
+  #   usbanksl, 
+  #   eubanksl)
   
   #data in selected window
-  y                   <- window((y), start=c(1990,2), end=c(2010,12))
-  basic.results <- basic.model(y, 12, 100, c(1990,2), c(2010,12))
+  # y                   <- window((y), start=c(1990,2), end=c(2010,12))
+  # basic.results <- basic.model(y, 12, 100, c(1990,2), c(2010,12))
 
 ```
+
 
 ##Extended Model
 
@@ -711,8 +712,8 @@ $\kappa_{\Sigma}$ at $\kappa_a^{(0)}$ and $\kappa^{(0)}_{\Sigma}$
 
 At each iteration s:
 
-1.  Draw \$ (A,\Sigma)\^{(s)} \sim p(A,\Sigma\| X,Y,\kappa*a\^{(s-1)},*
-    \kappa{\Sigma}\^{(s-1)}) \$
+1.  Draw \$ (A,\Sigma)\^{(s)} \sim p(A,\Sigma\|
+    X,Y,\kappa\*a\^{(s-1)},\* \kappa{\Sigma}\^{(s-1)}) \$
 2.  Draw $\kappa_a^{(s)} \sim p(\kappa_a|Y,X,A,\Sigma)$
 3.  Draw $\kappa_{\Sigma}^{(s)} \sim p(\kappa_{\Sigma}|Y,X,A,\Sigma)$
 
@@ -897,8 +898,12 @@ both parameters was set equal to one.
 ```
 
 ## Impulse Response Functions
-My model comprises the instrument in the first position, and I will compute impulse response functions assuming that the instrument will affect all the other variables exogenously. The assumptions of @MollerWolf2021LPVARS are satisfied given our Bayesian framework and our cholesky decomposition:
-$$
+
+My model comprises the instrument in the first position, and I will
+compute impulse response functions assuming that the instrument will
+affect all the other variables exogenously. The assumptions of
+@MollerWolf2021LPVARS are satisfied given our Bayesian framework and our
+cholesky decomposition: $$
 \begin{bmatrix}
 b_0^{1,1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 b_0^{2,1} & b_0^{2,2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -932,8 +937,9 @@ b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_
 \text{eubanksl} \\
 \end{bmatrix}
 $$
+
 ```{r}
-#| echo: true 
+#| echo: false 
 #| message: false
 #| warning: false
   
@@ -970,10 +976,23 @@ $$
     # log(eubdlev), 
     # usbanksl, 
     # eubanksl)
+```
   
+
+```{r}
+#| echo: true 
+#| message: false  
+#| warning: false
+  # Impulse response functions
+  # Forecast Error Variance Decomposition
+  ###########################################################
+  set.seed(420)
   y                   <- window((y), start=c(1990,2), end=c(2010,12))
-  basic.results <- basic.model(y, 12, 5000, c(1990,2), c(2010,12))
-  S=5000 #S2 draws of the extended model
+  basic.results <- basic.model(y, 12, 10000, c(1990,2), c(2010,12))
+  N=ncol(y)
+  h=24
+  p=12
+  S=10000 #S2 draws of the extended model
   IRF.posterior     = array(NA,c(N,N,h+1,S))
   IRF.inf.posterior = array(NA,c(N,N,S))
   FEVD.posterior    = array(NA,c(N,N,h+1,S))
@@ -1000,9 +1019,7 @@ $$
 }
   FEVD.posterior    = 100*FEVD.posterior
 
-  save(IRF.posterior,IRF.inf.posterior, FEVD.posterior, file=("irf-instrument-fevd.RData"))
-
-
+  #save(IRF.posterior,IRF.inf.posterior, FEVD.posterior, file=("irf-instrument-fevd.RData"))
 
   # colours for IRFs
   ############################################################
@@ -1017,7 +1034,7 @@ $$
 
   # plot IRFs extended model
   ############################################################
-  load("irf-instrument-fevd.RData")
+  #load("irf-instrument-fevd.RData")
   IRF.posterior.inst = IRF.posterior[,1,,] #takes the instruments IRFs
   IRFs.k1           = apply(IRF.posterior.inst,1:2,median) #mean of the S IRFs
   IRFs.inf.k1       = apply(IRF.posterior.inst,1,mean)
@@ -1039,7 +1056,6 @@ $$
   polygon(c(hh,(h+1):1), c(IRFs.k1.hdi[1,n,hh],IRFs.k1.hdi[2,n,(h+1):1]), col=mcxs3.shade1,border=mcxs3.shade1)
   polygon(c(hh,(h+1):1), c(IRFs.k1.hdi2[1,n,hh],IRFs.k1.hdi2[2,n,(h+1):1]), col=mcxs4.shade1,border=mcxs4.shade1)
   abline(h=0)
-  lines(hh, IRFs.k1[n,hh],lwd=2,col=mcxs1)
     }
   }
 ```
@@ -1056,24 +1072,29 @@ $$
 
   # plot FEVDs for instrument shock
   ############################################################
-  fevd.inst  = apply(FEVD.posterior[1,,,],1:2,mean) #real gdp
-  fevd.inst  = rbind(rep(0,h+1),apply(fevd.inst,2,cumsum))
+  fevd.dgs1  = apply(FEVD.posterior[6,,,],1:2,mean) #real gdp
+  fevd.dgs1  = rbind(rep(0,h+1),apply(fevd.dgs1,2,cumsum))
 
-  pdf(file="fevd-inst.pdf", height=7, width=12)
+  #pdf(file="fevd-inst.pdf", height=7, width=12)
   par(mar=rep(4,4),cex.axis=1, cex.lab=0.8)
-  plot(hh,fevd.inst[1,], type="n", ylim=c(0,100), axes=FALSE, xlab="", ylab="")
+  plot(hh,fevd.dgs1[1,], type="n", ylim=c(0,100), axes=FALSE, xlab="", ylab="")
   axis(1,hh,c("","","","","","","","","","","","1 year","","","","","","","","","","","","2 years",""))
   axis(2,c(0,50,100),c("","FEVD[inst]",""))
   for (n in 1:N){
-   polygon(c(hh,(h+1):1), c(fevd.inst[n,hh],fevd.inst[n+1,(h+1):1]), col=colours[n],border=colours[n])
+   polygon(c(hh,(h+1):1), c(fevd.dgs1[n,hh],fevd.dgs1[n+1,(h+1):1]), col=colours[n],border=colours[n])
   }  
-  axis(4, (0.5*(fevd.inst[1:14,9]+fevd.inst[2:15,9]))[c(2,4,9,10)], c("pce","greaexus","globalra","glbcredit"))
-  dev.off()
-  
+  axis(4, (0.5*(fevd.dgs1[1:14,9]+fevd.dgs1[2:15,9]))[c(1,2)], c("inst", "pce"))
+```
+
+
+```{r} 
+#| echo: true 
+#| message: false
+#| warning: false
   fevd.inst  = apply(FEVD.posterior[2,,,],1:2,mean) #real gdp
   fevd.inst  = rbind(rep(0,h+1),apply(fevd.inst,2,cumsum))
 
-  pdf(file="fevd-inst.pdf", height=7, width=12)
+  #pdf(file="fevd-inst.pdf", height=7, width=12)
   par(mar=rep(4,4),cex.axis=1, cex.lab=0.8)
   plot(hh,fevd.inst[1,], type="n", ylim=c(0,100), axes=FALSE, xlab="", ylab="")
   axis(1,hh,c("","","","","","","","","","","","1 year","","","","","","","","","","","","2 years",""))
@@ -1082,124 +1103,80 @@ $$
    polygon(c(hh,(h+1):1), c(fevd.inst[n,hh],fevd.inst[n+1,(h+1):1]), col=colours[n],border=colours[n])
   }  
   axis(4, (0.5*(fevd.inst[1:14,9]+fevd.inst[2:15,9]))[c(2,4,9,10)], c("pce","greaexus","globalra","glbcredit"))
-  dev.off()
 ```
 
+
 ```{r}
-#| echo: true 
+#| echo: false
 #| message: false
 #| warning: false
   
   # Impulse response functions extended model
   # Forecast Error Variance Decomposition
   ###########################################################
-  set.seed(420)
-  y = cbind(instrument,
-    (pce),
-    (indpro),
-    (greaexus), 
-    (glbinflows),
-    dgs1, 
-    bis, 
-    globalf, 
-    globalra, 
-    (glbcrexus), 
-    (usbdlev), 
-    (eubdlev), 
-    (usbanksl), 
-    (eubanksl))
-  
-    # y = cbind(instrument,
-    # log(pce),
-    # log(indpro),
-    # greaexus, 
-    # log(glbinflows),
-    # dgs1, 
-    # log(bis), 
-    # globalf, 
-    # globalra, 
-    # log(glbcredit), 
-    # log(usbdlev), 
-    # log(eubdlev), 
-    # usbanksl, 
-    # eubanksl)
-  
-  
-  y                  <- window((y), start=c(1990,2), end=c(2010,12))
-  extended.results <- extended.model(y, 12, 1000, 5000)
-  S=5000 #S2 draws of the extended model
-  IRF.posterior     = array(NA,c(N,N,h+1,S))
-  IRF.inf.posterior = array(NA,c(N,N,S))
-  FEVD.posterior    = array(NA,c(N,N,h+1,S))
-  J                 = cbind(diag(N),matrix(0,N,N*(p-1))) #[I_N,0_{NxN(p-1)}]
-  
-  for (s in 1:S){
-  A.bold          = rbind(t(extended.results$A[2:(1+N*p),,s]),cbind(diag(N*(p-1)),matrix(0,N*(p-1),N)))  #rbind([A1...AP], cbind(I_{N(p-1)}, 0_{N(p-1)xN}))
-  IRF.inf.posterior[,,s]          = J %*% solve(diag(N*p)-A.bold) %*% t(J) #J*(I-A)^-1*J'
-  A.bold.power    = A.bold
-  for (i in 1:(h+1)){
-    if (i==1){
-      IRF.posterior[,,i,s]        = extended.results$B[,,s] #first value is first IRF
-    } else {
-      IRF.posterior[,,i,s]        = J %*% A.bold.power %*% t(J) %*%extended.results$B[,,s] #J*A*J'*B.posterior
-      A.bold.power                = A.bold.power %*% A.bold
-    }
-    for (n in 1:N){
-    for (nn in 1:N){
-    FEVD.posterior[n,nn,i,s]  = sum(IRF.posterior[n,nn,1:i,s]^2)
-     }
-    }
-    FEVD.posterior[,,i,s]         = diag(1/apply(FEVD.posterior[,,i,s],1,sum))%*%FEVD.posterior[,,i,s]
-  }
-}
-  FEVD.posterior    = 100*FEVD.posterior
+#   set.seed(420)
+#   y = cbind(instrument,
+#     (pce),
+#     (indpro),
+#     (greaexus),
+#     (glbinflows),
+#     dgs1,
+#     bis,
+#     globalf,
+#     globalra,
+#     (glbcrexus),
+#     (usbdlev),
+#     (eubdlev),
+#     (usbanksl),
+#     (eubanksl))
+# 
+#     # y = cbind(instrument,
+#     # log(pce),
+#     # log(indpro),
+#     # greaexus,
+#     # log(glbinflows),
+#     # dgs1,
+#     # log(bis),
+#     # globalf,
+#     # globalra,
+#     # log(glbcredit),
+#     # log(usbdlev),
+#     # log(eubdlev),
+#     # usbanksl,
+#     # eubanksl)
+# 
+# 
+#   y                  <- window((y), start=c(1990,2), end=c(2010,12))
+#   extended.results <- extended.model(y, 12, 1000, 5000)
+#   S=5000 #S2 draws of the extended model
+#   IRF.posterior     = array(NA,c(N,N,h+1,S))
+#   IRF.inf.posterior = array(NA,c(N,N,S))
+#   FEVD.posterior    = array(NA,c(N,N,h+1,S))
+#   J                 = cbind(diag(N),matrix(0,N,N*(p-1))) #[I_N,0_{NxN(p-1)}]
+# 
+#   for (s in 1:S){
+#   A.bold          = rbind(t(extended.results$A[2:(1+N*p),,s]),cbind(diag(N*(p-1)),matrix(0,N*(p-1),N)))  #rbind([A1...AP], cbind(I_{N(p-1)}, 0_{N(p-1)xN}))
+#   IRF.inf.posterior[,,s]          = J %*% solve(diag(N*p)-A.bold) %*% t(J) #J*(I-A)^-1*J'
+#   A.bold.power    = A.bold
+#   for (i in 1:(h+1)){
+#     if (i==1){
+#       IRF.posterior[,,i,s]        = extended.results$B[,,s] #first value is first IRF
+#     } else {
+#       IRF.posterior[,,i,s]        = J %*% A.bold.power %*% t(J) %*%extended.results$B[,,s] #J*A*J'*B.posterior
+#       A.bold.power                = A.bold.power %*% A.bold
+#     }
+#     for (n in 1:N){
+#     for (nn in 1:N){
+#     FEVD.posterior[n,nn,i,s]  = sum(IRF.posterior[n,nn,1:i,s]^2)
+#      }
+#     }
+#     FEVD.posterior[,,i,s]         = diag(1/apply(FEVD.posterior[,,i,s],1,sum))%*%FEVD.posterior[,,i,s]
+#   }
+# }
+#   FEVD.posterior    = 100*FEVD.posterior
 
-  save(IRF.posterior,IRF.inf.posterior, FEVD.posterior, file=("irf-instrument-fevd2.RData"))
+  #save(IRF.posterior,IRF.inf.posterior, FEVD.posterior, file=("irf-instrument-fevd2.RData"))
 
-
-
-  # colours for IRFs
-  ############################################################
-  mcxs1  = "#05386B"
-  mcxs2  = "#379683"
-  mcxs3  = "#5CDB95"
-  mcxs4  = "#8EE4AF"
-  mcxs5  = "#EDF5E1"
-  purple = "#b02442"
-  mcxs1.rgb   = col2rgb(mcxs1)
-  mcxs1.shade1= rgb(mcxs1.rgb[1],mcxs1.rgb[2],mcxs1.rgb[3], alpha=120, maxColorValue=255)
-  mcxs2.rgb   = col2rgb(mcxs2)
-  mcxs2.shade1= rgb(mcxs2.rgb[1],mcxs2.rgb[2],mcxs2.rgb[3], alpha=120, maxColorValue=255)
-
-
-  # plot IRFs extended model
-  ############################################################
-  load("irf-instrument-fevd2.RData")
-  IRF.posterior.inst = IRF.posterior[,1,,] #takes the instruments IRFs
-  IRFs.k1           = apply(IRF.posterior.inst,1:2,median) #mean of the S IRFs
-  IRFs.inf.k1       = apply(IRF.posterior.inst,1,mean)
-  rownames(IRFs.k1) = y.names
-
-  IRFs.k1.hdi    = apply(IRF.posterior.inst,1:2,hdi, credMass=0.68)
-  hh          = 1:(h+1)
-  pdf(file="FF-irf-mps2.pdf", height=9, width=12)
-  par(mfrow=c(5,2), mar=c(2, 2, 2, 2),cex.axis=1.5, cex.lab=1.5)
-  IRFs.wanted      <- c(2,3,4,5,6,7,9,10,12,14)
-  for (n in 1:14){
-    if (n %in% IRFs.wanted) {
-  ylims     = range(IRFs.k1[n,hh],IRFs.k1.hdi[,n,1:4],0)
-  plot(hh,IRFs.k1[n,hh], type="l", ylim=ylims, axes=FALSE, xlab="", ylab=rownames(IRFs.k1)[n])
-  if (n==5 | n==6){
-    axis(1,c(4,8,12,16,20,24),c("4","8","12","16","20","24"))
-  } else {
-    axis(1,c(4,8,12,16,20,24),c("4","8","12","16","20","24"))
-  }
-  axis(2,c(ylims[1],0,ylims[2]),round(c(ylims[1],0,ylims[2]),3))
-  polygon(c(hh,(h+1):1), c(IRFs.k1.hdi[1,n,hh],IRFs.k1.hdi[2,n,(h+1):1]), col=mcxs1.shade1,border=mcxs1.shade1)
-  abline(h=0)
-  lines(hh, IRFs.k1[n,hh],lwd=2,col=mcxs1)
-    }
-  }
 
 ```
 
