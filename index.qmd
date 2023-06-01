@@ -643,7 +643,7 @@ $ \Sigma^{-1}=(B_0B_0^{'}) $.
 ```
 
 
-##Extended Model
+## Extended Model
 
 In the extended model, I set hyperprior parameters for the
 autoregressive parameter $\kappa_A$ to follow an Inverse Gamma 2
