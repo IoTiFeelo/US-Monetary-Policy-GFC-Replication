@@ -890,12 +890,6 @@ both parameters was set equal to one.
   abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
 ```
 
-```{r}
-#| echo: true 
-#| message: false
-#| warning: false
-## plot the mean of the kappas
-```
 
 ## Impulse Response Functions
 
