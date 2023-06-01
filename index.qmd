@@ -886,7 +886,7 @@ both parameters was set equal to one.
   par(mfrow=c(1,2),mar=c(2,2,2,2))
   hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[a])), border=F, xlim=c(0,0.5))
   abline(v = mean(extended.artificial$k.a.convergence), col='purple4', lwd = 2)
-  hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis", col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
+  hist(extended.artificial$k.sigma.convergence, breaks=1000, col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
   abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
 ```
 
