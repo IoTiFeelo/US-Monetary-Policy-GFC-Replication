@@ -562,8 +562,8 @@ In order to compute our posterior parameters in R, we first specify
 values for our priors, then we calculate the posteriors and draw $A$ and
 $\Sigma$ respectively from a Matrix-Variate-normal and Inverse Wishart
 distributions. At this point, we can obtain our structural parameters
-through a cholesky decomposition of our matrix $ \Sigma $, namely with
-$ \Sigma^{-1}=(B_0B_0^{'}) $.
+through a cholesky decomposition of our matrix $\Sigma$, namely with
+$\Sigma^{-1}=(B_0B_0^{'})$.
 
 ```{r}
 #| echo: true 
