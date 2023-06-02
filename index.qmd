@@ -562,8 +562,8 @@ In order to compute our posterior parameters in R, we first specify
 values for our priors, then we calculate the posteriors and draw $A$ and
 $\Sigma$ respectively from a Matrix-Variate-normal and Inverse Wishart
 distributions. At this point, we can obtain our structural parameters
-through a cholesky decomposition of our matrix $ \Sigma $, namely with
-$ \Sigma^{-1}=(B_0B_0^{'}) $.
+through a cholesky decomposition of our matrix $\Sigma$, namely with
+$\Sigma^{-1}=(B_0B_0^{'})$.
 
 ```{r}
 #| echo: true 
@@ -643,7 +643,7 @@ $ \Sigma^{-1}=(B_0B_0^{'}) $.
 ```
 
 
-##Extended Model
+## Extended Model
 
 In the extended model, I set hyperprior parameters for the
 autoregressive parameter $\kappa_A$ to follow an Inverse Gamma 2
@@ -886,16 +886,10 @@ both parameters was set equal to one.
   par(mfrow=c(1,2),mar=c(2,2,2,2))
   hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[a])), border=F, xlim=c(0,0.5))
   abline(v = mean(extended.artificial$k.a.convergence), col='purple4', lwd = 2)
-  hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis", col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
+  hist(extended.artificial$k.sigma.convergence, breaks=1000, col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
   abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
 ```
 
-```{r}
-#| echo: true 
-#| message: false
-#| warning: false
-## plot the mean of the kappas
-```
 
 ## Impulse Response Functions
 
