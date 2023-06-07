@@ -20,8 +20,7 @@ text-align: justify !important
 
 # Introduction
 
-<<<<<<< Updated upstream
-I replicate @miranda2020us, Review of Economic Studies. In their paper,
+We replicate @miranda2020us, Review of Economic Studies. In their paper,
 the authors jointly evaluate the effects of financial, monetary and real
 variables, in the U.S. and abroad, following a 1% shock of the Federal
 Reserve (FED) interest rate. In particular, the authors rely on an
@@ -33,9 +32,7 @@ course taught by Dr. [Tomasz
 Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak).
 The specific challenge will be writing R codes to disentangle their
 framework.
-=======
 We replicate @miranda2020us, Review of Economic Studies. In their paper, the authors jointly evaluate the effects of financial, monetary and real variables, in the U.S. and abroad, following a 1% shock of the Federal Reserve (FED) interest rate. In particular, the authors rely on an instrumental variable to identify U.S. monetary policy shocks. This is to avoid implausible restrictions on their variable of interest. Our task will be to understand the model of these two scholars and replicate it with simplifications given the time scope of the Macroeconometrics course taught by Dr. [Tomasz Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak). The specific challenge will be writing R codes to disentangle their framework.
->>>>>>> Stashed changes
 
 # The Paper
 
@@ -45,7 +42,7 @@ We replicate @miranda2020us, Review of Economic Studies. In their paper, the aut
 
 ```{r}
 #| echo: false
-#| #| message: false
+#| message: false
 #| warning: false
 #set working directory 
 #setwd("/Users/filo/Dropbox/Macrometrics/US-Monetary-Policy-and-the-Global-Financial-Cycle-Replication")
@@ -59,7 +56,6 @@ We replicate @miranda2020us, Review of Economic Studies. In their paper, the aut
   library(fredr)
   library(sovereign)
   library(MASS)
-  #library(gridExtra)
   library(patchwork)
   library(fredr)
   library(mgcv)
@@ -97,26 +93,7 @@ We replicate @miranda2020us, Review of Economic Studies. In their paper, the aut
   eubdlev    = ts((data$EUBDLEV), start=c(1980,1), frequency=12) #Leverage EU Global Banks
   usbanksl   = ts((data$USBANKSL), start=c(1980,1), frequency=12) #Leverage US Banks
   eubanksl   = ts((data$EUBANKSL), start=c(1980,1), frequency=12) #Leverage EU Banks
-
-<<<<<<< Updated upstream
-  #create the bigy matrix with my data
-  y = cbind(instrument,
-    (pce),
-    (indpro),
-    (greaexus), 
-    (glbinflows),
-    dgs1, 
-    log(bis), 
-    globalf, 
-    globalra, 
-    (glbcrexus), 
-    (usbdlev), 
-    (eubdlev), 
-    (usbanksl), 
-    (eubanksl))
   
-  y.names= cbind("FF4 Instrument", 
-=======
   #create the bigy matrix with our data
   y = cbind(instrument,
             dgs1, 
@@ -135,15 +112,10 @@ We replicate @miranda2020us, Review of Economic Studies. In their paper, the aut
   
   y.names= cbind("FF4 Instrument", 
                  "1Y Treasury Rate",
->>>>>>> Stashed changes
                  "PCE", 
                  "Industrial Production", 
                  "Global Real Production ex US",
                  "Global Inflows All Sectors",
-<<<<<<< Updated upstream
-                 "1Y Treasury Rate",
-=======
->>>>>>> Stashed changes
                  "BIS EER",
                  "Global Factor",
                  "Global Risk Aversion",
@@ -164,12 +136,8 @@ We replicate @miranda2020us, Review of Economic Studies. In their paper, the aut
 #| echo: true 
 #| message: false
 #| warning: false
-<<<<<<< Updated upstream
-#plot of global factors with VIX
-=======
 #| code-fold: true
 #| code-summary: "Global Factors Plot"
->>>>>>> Stashed changes
 ggplot() + 
   geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1975-2010`, linetype = "GF 1975-2010"), color ="blue", na.rm = TRUE, linewidth=1.2) + 
   geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1990-2012`, linetype = "GF 1990-2012"), color="purple", na.rm = TRUE, linewidth=1.2) +
@@ -206,16 +174,11 @@ We download the data directly from the website of [Miranda-Agrippino](http://sil
 We will study the global specifications, and include the following variables:
 
 ```{r}
-<<<<<<< Updated upstream
-#| message: false
-#| warning: false
-=======
 #| echo: true 
 #| message: false
 #| warning: false
 #| code-fold: true
 #| code-summary: "Data Plots"
->>>>>>> Stashed changes
   library(ggplot2)
   library(patchwork)
   ############################################################
@@ -294,101 +257,13 @@ fed.gdp.plot <-  (ggplot(data=data) +
 ```
 
 ## Data Description
-
-<<<<<<< Updated upstream
-Against this backdrop, our interest is to study the degree by which U.S.
-monetary policy shocks can propagate throughout the economies of the
-world. In order to have a global picture we study macroeconomic
-variables that can affect and influence a FED change in the interest
-rate. The global variables are constructed scrutinizing these countries:
-Argentina, Australia, Austria, Belarus, Belgium, Bolivia, Brazil,
-Bulgaria, Canada, Chile, Colombia, Costa Rica, Croatia, Cyprus, Czech
-Republic, Denmark, Ecuador, Finland, France, Germany, Greece, Hong Kong,
-Hungary, Iceland, Indonesia, Ireland, Italy, Japan, Latvia, Lithuania,
-Luxembourg, Malaysia, Malta, Mexico, Netherlands, New Zealand, Norway,
-Poland, Portugal, Romania, Russia, Serbia, Singapore, Slovakia,
-Slovenia, South Africa, South Korea, Spain, Sweden, Switzerland,
-Thailand, Turkey, U.K., and the U.S.
-
-As discussed in the previous section, I am ìncluding the variables of
-the global VAR of @miranda2020us. In the first graph, I include the
-following variables: -the U.S. industrial production index that measures
-the real output of all relevant establishments located in the U.S.; -the
-Bank for International Settlement (BIS) effective exchange rate (EER)
-for the United States, i.e. a summary measure calculated by the BIS to
-account for changes in the U.S. bilateral exchange rate against other
-countries by their trade importance; -global inflows, defined as direct
-cross-border credit flows from the U.S. to the aforementioned countries'
-banks and non-banks recipients. This variable is key to explain the
-degree of financial dependency of the rest of the world vis-à-vis the
-financial hegemon; -global domestic credit, another key variable in our
-VAR that outlines the total amount of funds in the world economy,
-including loans, debt instruments, and other forms of credit provided by
-financial institutions.
-
-In the second graph, I outline four types of leverage. First of all,
-leverage can be defined as the ratio between assets and equity, with
-equity being the difference of assets and debts. In finance, this
-measurement refers to the use of borrowed funds to finance assets or
-investments. Against this backdrop, the authors construct this variable
-as the ratio between claims on private sector, i.e. credit extended by
-banks and other financial institutions to the private sector, and the
-sum of transferable deposits held by depository corporations, excluding
-central banks. This ratio reflects the proportion of credit extended to
-the private sector relative to the deposits held by depository
-corporations, excluding central banks. A higher ratio suggests a higher
-level of leverage in the banking sector. The authors differentiate
-between different leverages given the contrasting risk-taking behavior
-of financial agents. As a matter of fact, we can observe that the
-leverage of EU global banks and US brokers and dealers is much higher
-than the leverage of EU and US. EU global banks include banks that are
-systematically important such as UBS and Unicredit. Global banks'
-leverage is higher because of several reasons such as size and risk
-appetite. The behavior of brokers and dealers can be explained by their
-risk-loving approach, given that a higher total asset growth is
-correlated with an increase in leverage growth (insert data from Fred).
-On the other hand, commercial banks tend to have constant leverage
-growth, notwithstanding their total asset growth (insert graph).
-
-In the third graph, I include the FED policy rate coupled with the
-global real economic activity index (excluding the US). We can observe
-the lagged effect of an increase in the interest rate with a decrease in
-global economic activity. In the fourth graph I include the global
-factor discussed in the previous section, plotted with the global risk
-aversion (one variable is the inverse of the other). The factor is
-rotated to provide an intuitive view that an increase in the factor
-(risk aversion) reflects an increase in global asset prices. Lastly, I
-plot the U.S. PCE deflator measuring changes in the price of goods and
-services over time.
-
-On top of these variables, I will add the aforementioned instrument on
-top of the $y_t$ variable. In the next section I will provide reason for
-this procedure.
-
-## Order of Integration of the Variables
-
-I run an augmented Dickey Fuller (ADF) Test to determine the order of
-integration of my variables. All the variables except the instrument
-fail to reject the null hypotheses that the variables present a
-uni-root. In order to provide more insight on the order of integration I
-re-run an ADF test with the first difference of the variables. I expect
-it to be integrated of order 1 (I(1)). The ADF test of the
-first-difference data supports these expectations:
-
-```{r}
-#| message: false
-#| warning: false
-=======
 Against this framework, our interest is to study the degree by which U.S. monetary policy shocks can propagate throughout the world's economies. In order to have a global picture we study macroeconomic variables that can affect and influence a FED change in the interest rate. The global variables are constructed by scrutinizing these countries: Argentina, Australia, Austria, Belarus, Belgium, Bolivia, Brazil, Bulgaria, Canada, Chile, Colombia, Costa Rica, Croatia, Cyprus, Czech Republic, Denmark, Ecuador, Finland, France, Germany, Greece, Hong Kong, Hungary, Iceland, Indonesia, Ireland, Italy, Japan, Latvia, Lithuania, Luxembourg, Malaysia, Malta, Mexico, Netherlands, New Zealand, Norway, Poland, Portugal, Romania, Russia, Serbia, Singapore, Slovakia, Slovenia, South Africa, South Korea, Spain, Sweden, Switzerland, Thailand, Turkey, U.K., and the U.S.
 
 As discussed in the previous section, we are ìncluding the variables of the global VAR of @miranda2020us. In the first graph, we include the following variables: 
 
--the U.S. industrial production index that measures the real output of all relevant establishments located in the U.S.; 
-
+-the U.S. industrial production index that measures the real output of all relevant establishments located in the U.S.;
 -the Bank for International Settlement (BIS) effective exchange rate (EER) for the United States, i.e. a summary measure calculated by the BIS to account for changes in the U.S. bilateral exchange rate against other countries by their trade importance; 
-
 -global inflows, defined as direct cross-border credit flows from the U.S. to the aforementioned countries' banks and non-bank recipients. This variable is key to explaining the degree of financial dependency of the rest of the world vis-à-vis the financial hegemon; 
-
 -global domestic credit, another key variable in our VAR that outlines the total amount of funds in the world economy, including loans, debt instruments, and other forms of credit provided by financial institutions.
 
 In the second graph, we outline four types of leverage. First of all, leverage can be defined as the ratio between assets and equity, with equity being the difference between assets and debts. In finance, this measurement refers to the use of borrowed funds to finance assets or investments. Against this backdrop, the authors construct this variable as the ratio between claims in the private sector, i.e. credit extended by banks and other financial institutions to the private sector, and the sum of transferable deposits held by depository corporations, excluding central banks. This ratio reflects the proportion of credit extended to the private sector relative to deposits held by depository corporations, excluding central banks. A higher ratio suggests a higher banking leverage level. The authors differentiate between different leverages given financial agents' risk-taking behavior. As a matter of fact, we can observe that the leverage between EU global banks and US brokers and dealers is much larger than the leverage of big but not systemic EU and US banks. EU global banks include systematically important banks such as UBS and Unicredit. Global banks' leverage is high for several reasons such as size and risk appetite. Brokers and dealers' behavior can be explained by their risk-loving approach.
@@ -406,7 +281,6 @@ We run an augmented Dickey Fuller (ADF) test to determine the order of integrati
 #| warning: false
 #| code-fold: true
 #| code-summary: "ADF-tests"
->>>>>>> Stashed changes
   library(tseries)
   adf <- as.data.frame(matrix(nrow=14,ncol=3,NA))
   rownames(adf) <- colnames(y[1:14])
@@ -419,20 +293,8 @@ We run an augmented Dickey Fuller (ADF) test to determine the order of integrati
     adf[i,"p-value"]        <-  round(as.numeric(adf_tmp[4]),3)
   }
   
-    adf.diff <- as.data.frame(matrix(nrow=14,ncol=3,NA))
+  adf.diff <- as.data.frame(matrix(nrow=14,ncol=3,NA))
   rownames(adf.diff) <- colnames(y[1:14])
-<<<<<<< Updated upstream
-  colnames(adf.diff) <- c("Dickey-Fuller diff","Lag-order", "p-value")
-  
-  for (i in 1: ncol(y)){
-    tmp.diff                    <-  adf.test(diff(y[,i]))
-    adf.diff[i,"Dickey-Fuller diff"] <-  round(as.numeric(tmp.diff[1]),3)
-    adf.diff[i,"Lag-order"]     <-  as.numeric(tmp.diff[2])
-    adf.diff[i,"p-value"]       <-  round(as.numeric(tmp.diff[4]),3)
-  }
-  
-  knitr::kable(cbind(adf, adf.diff), index=TRUE)
-=======
   colnames(adf.diff) <- c("Dickey-Fuller diff","Lag-order diff", "p-value diff")
   
   for (i in 1: ncol(y)){
@@ -445,34 +307,14 @@ We run an augmented Dickey Fuller (ADF) test to determine the order of integrati
   colnames(tab)[1] <- "Variable Names"
   knitr::kable(tab, index=TRUE)
 
->>>>>>> Stashed changes
 ```
 
 # The Model
 
 ## BVAR Framework
 
-<<<<<<< Updated upstream
-From @HRW2022ProxySVARs I define the model as: $$
-y_t=B_0B_1y_{t-1}+...+B_0B_py_{t-p}+B_0\varepsilon_t, t=1,..,T $$
-$$y_t=A_1y_{t-1}+...+A_py_{t-p}+u_t$$ where
-$A_j, : \left \{j=1,2,\dots,p\right \}$ where $A(L)=B_0B(L)$ are a K x K
-coefficient matrices, and L is the lag operator, and $u_t$ in the first
-reduced form is serially uncorrelated with zero mean and positive
-definite (non-diagonal) covariance matrix $\Sigma_u.$ The structural
-shocks $\varepsilon_t$ in the second reduced form assumed to be mutually
-uncorrelated and normalised to have unit variance.
-$\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks
-are mapped to the reduced-form system through a K x K non-singular
-matrix $B_0$, such that $B_0^{-1}B_0^{-1'}=\Sigma_u$. For simplicity,
-the process is assumed to be causal and
-$detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for
-$\left| z \right|\le 1$. This ensures that the process has a Wold moving
-average MA representation. Moreover,
-=======
 From @HRW2022ProxySVARs we define the model as: $$
 y_t=B_0B_1y_{t-1}+...+B_0B_py_{t-p}+B_0\varepsilon_t, t=1,..,T $$ $$y_t=A_1y_{t-1}+...+A_py_{t-p}+u_t$$ where $A_j, : \left \{j=1,2,\dots,p\right \}$ where $A(L)=B_0B(L)$ are a K x K coefficient matrices, and L is the lag operator, and $u_t$ in the first reduced form is serially uncorrelated with zero mean and positive definite (non-diagonal) covariance matrix $\Sigma_u.$ The structural shocks $\varepsilon_t$ in the second reduced form are assumed to be mutually uncorrelated and normalised to have unit variance. $\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks are mapped to the reduced-form system through a K x K non-singular matrix $B_0$, such that $B_0^{-1}B_0^{-1'}=\Sigma_u$. For simplicity, the process is assumed to be causal and $detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for $\left| z \right|\le 1$. This ensures that the process has a Wold moving average MA representation. Moreover,
->>>>>>> Stashed changes
 
 ```{=tex}
 \begin{align*}
@@ -482,10 +324,9 @@ y_t=\mu+\sum_{i=0}^{\infty}\Phi_iu_{t-i}=\mu+\sum_{i=0}^{\infty}\Phi_iB_0\vareps
 ```
 With: \begin{gather}
 \mu=A(1)^{-1}\nu, ::: \Phi_0=I_K, \ \Phi_i=\sum_{j=1}^{i}A_j\Phi_{i-j}, ::: A_j=0 :for: j>p.
-<<<<<<< Updated upstream
 \end{gather} The second to last MA representation is of particular
 importance because the structural MA coefficients $\Theta_i=\Phi_iB_0$
-cannot be recovered without a proper identification. I will briefly
+cannot be recovered without a proper identification. We will briefly
 outline the Proxy SVAR approach.
 
 Let $z_t$ be an external instrument to identify the structural shock of
@@ -497,69 +338,30 @@ $\Xi(\varepsilon{lt}z_t)=0, \forall l\:\epsilon\left \{1,\dots, K\right \}\setmi
 From these conditions, it follows that the population covariance between
 the instrument and VAR residuals obtain the k-th column if $B_0$,
 denoted by $B_{0k}$.
-=======
 \end{gather} The second to last MA representation is of particular importance because the structural MA coefficients $\Theta_i=\Phi_iB_0$ cannot be recovered without a proper identification. We will briefly outline the Proxy SVAR approach.
-
 Let $z_t$ be an external instrument to identify the structural shock of interest $\varepsilon_{kt}, k\:\epsilon \: \left \{1,\dots, K\right \}$. $z_t$ has to satisfy the *relevant* condition $\Xi(\varepsilon_{kt}z_t)=\phi \neq 0$ and the *exogeneity* condition $\Xi(\varepsilon{lt}z_t)=0, \forall l\:\epsilon\left \{1,\dots, K\right \}\setminus\left \{k\right \}$.
-
 From these conditions, it follows that the population covariance between the instrument and VAR residuals obtains the k-th column of $B_0$, denoted by $B_{0k}$.
->>>>>>> Stashed changes
 
 $$
 \Xi(u_tz_t) = B_{0,k} \\
 \Xi(\varepsilon{kt}z_t)=\phi B_{0,k}
 $$
-
-<<<<<<< Updated upstream
 Moreover, let $\Pi$ denotes the $1$x$K$ coefficient vector from the
 regression of the instrument on the residual vector $u_t$ gives the
 shock $\varepsilon_{kt}$ up to a scale $\phi$.
-
 $\Pi u_t=\Xi(z_tu^{'}_t)\Sigma_{u}^{-1}u_t=\phi B^{'}_{0,k}\left [B_0B_0^{'} \right ]u_t=\phi e^{'}_t\varepsilon_{kt}$
-
 @MollerWolf2021LPVARS, exploiting their result that Local Projections
 and VAR impulse response function are equal up to a constant of
 proportionality, show that proxy SVARS impulse responses can be computed
 putting the instrument in the first row of the data vector $y_t$ in a
 SVAR framework. This result follows from the invertibility of
 $\varepsilon$ and two assumptions:
-
 -the data $y_t$ is covariance-stationary;
-
 -the data $y_t$ is a jointly Gaussian vector time series.
 
 In our Bayesian approach these requirements are met when we define the
-distributions of our error terms. I will outline them in the next
+distributions of our error terms. We will outline them in the next
 section.
-
-## Basic Model
-
-I specify my model to follow a matrix-variate normal distribution
-\begin{gather}
-Y = XA + E \\
-\\ E|X \sim MN_{T \times N}(0_{T \times N},\Sigma,I_T) 
-\end{gather} Given that the function Y is a linear combination of the
-error terms E, we can specify \begin{gather}
-Y|X,A,\sim MN_{T \times N}(XA,\Sigma,I_T)
-\end{gather} Hence, the Likelihood function follows a
-Matrix-Variate-Normal form: \begin{gather}
-L(A,\Sigma|Y,X) \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(Y-XA)'(Y-XA) \right] \right\} \\
-\\ \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(A-\hat{A})'X'X(A-\hat{A}) \right] \right\} exp \left\{-\frac{1}{2} tr \left[\Sigma^{-1}(Y-X \hat{A})'(Y-X \hat{A}) \right] \right\} \\
-\end{gather} where from Maximum Likelihood Estimation we have obtained
-\begin{gather}
-\hat{A} = (X'X)^{-1}X'Y \\
-\\ \hat{\Sigma} = \frac{1}{T} (Y-X \hat{A})'(Y-X \hat{A})
-\end{gather} In the basic model, our prior follows a natural-conjugate
-prior distribution of the same form: \begin{gather}
-=======
-Moreover, let $\Pi$ denotes the $1$x$K$ coefficient vector from the instrument regression on the residual vector $u_t$ which gives the shock $\varepsilon_{kt}$ up to a scale $\phi$.
-
-$\Pi u_t=\Xi(z_tu^{'}_t)\Sigma_{u}^{-1}u_t=\phi B^{'}_{0,k}\left [B_0B_0^{'} \right ]u_t=\phi e^{'}_t\varepsilon_{kt}$
-
-@MollerWolf2021LPVARS, exploiting their result that Local Projections and VAR impulse response functions are equal up to a constant of proportionality. They show that proxy SVARS impulse responses can be computed by putting the instrument in the first row of the data vector $y_t$ in a SVAR framework. This result follows the invertibility of $\varepsilon$ and two further assumptions:
--the data $y_t$ is covariance-stationary;
--the data $y_t$ is a jointly Gaussian vector time series.
-We will explain in the next section how we tackle these requirements.
 
 ## Basic Model
 
@@ -575,7 +377,6 @@ L(A,\Sigma|Y,X) \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \l
 \hat{A} = (X'X)^{-1}X'Y \\
 \\ \hat{\Sigma} = \frac{1}{T} (Y-X \hat{A})'(Y-X \hat{A})
 \end{gather} In the basic model, our prior follows a natural-conjugate prior distribution of the same form: \begin{gather}
->>>>>>> Stashed changes
 p(A,\Sigma) = p(A|\Sigma) p(\Sigma) \\
 \\ A|\Sigma \sim MN_{K \times N} (\underline{A}, \Sigma , \underline{V}) \\
 \\ \Sigma \sim IW_{N}(\underline{S},\underline{\nu})
@@ -586,16 +387,7 @@ With parameters: \begin{gather}
 \\ Var[vec(A)] = \Sigma \otimes  \underline{V} \\
 \\ \underline{V} = diag([\kappa_2 \quad \kappa_1 (p^{-2} \otimes I_N)]) \\
 \\ p = [1,2,...p]
-<<<<<<< Updated upstream
-\end{gather} The parameter $\kappa_2$ and $\kappa_1$ specify
-respectively the prior of the overall shrinkage level for the constant
-term and for the autoregressive slopes. I specify $\kappa_2=1$ and
-$\kappa_1=0.02$ based on the fact that you should shrink the constant
-term much less than the autoregressive parameters. Furthermore, the full
-conditional posterior is: \begin{gather}
-=======
 \end{gather} $\kappa_2$ and $\kappa_1$ describe, respectively, the priors of the overall shrinkage level of the constant term and the variance-covariance matrix of the autoregressive slopes for the constant term. We specify $\kappa_2=1$ and $\kappa_1=0.02$ to respect @MollerWolf2021LPVARS assumptions. We would not expect persistence in each lag for stationary variables following a random walk. Moreover, we set the prior of the autoregressive parameters $A$ equal to a vector of zeros. The resulting full conditional posterior is: \begin{gather}
->>>>>>> Stashed changes
 p(A,\Sigma|Y,X) = p(A|Y,X,\Sigma)p(\Sigma|Y,X) \\
 \\ p(A|Y,X,\Sigma) = MN_{K \times N}(\bar{A}, \Sigma, \bar{V}) \\ 
 \\ p(\Sigma | Y, X) = IW_N(\bar{S},\bar{\nu})
@@ -620,12 +412,8 @@ p(A,\Sigma|Y,X) \propto \\
 +1}{2}} \times exp\left\{ -\frac{1}{2} tr \left[ \Sigma^{-1} \left[ (A-\bar{A})^{'} \bar{V}^{-1} (A-\bar{A})+\underline{S} +Y^{'}Y + \underline{A}^{'} \underline{V}^{-1}\underline{A} -\bar{A}^{'} \bar{V}^{-1}\bar{A}\right]\right]\right\}
 \end{gather}
 ```
-<<<<<<< Updated upstream
-where the full conditional posterior has the same natural-conjugate form
-of our prior:
-=======
+
 where the full conditional posterior has the same natural-conjugate form of our prior:
->>>>>>> Stashed changes
 
 ```{=tex}
 \begin{gather}
@@ -643,28 +431,15 @@ with posterior parameters:
 \\ \bar{S} = \underline{S} + Y^{'}Y +  \underline{A}^{'}\underline{V}^{-1}\underline{A} - \bar{A}^{'}\bar{V}^{-1}\bar{A}
 \end{gather}
 ```
-<<<<<<< Updated upstream
-In order to compute our posterior parameters in R, we first specify
-values for our priors, then we calculate the posteriors and draw $A$ and
-$\Sigma$ respectively from a Matrix-Variate-normal and Inverse Wishart
-distributions. At this point, we can obtain our structural parameters
-through a cholesky decomposition of our matrix $\Sigma$, namely with
-$\Sigma^{-1}=(B_0B_0^{'})$.
-=======
 In order to compute our posterior parameters in R, we first specify values for our priors, then calculate the posteriors and draw $A$ and $\Sigma$ respectively from Matrix-Variate-normal and Inverse Wishart distributions. At this point, we can obtain our structural parameters through a Cholesky decomposition of our matrix $\Sigma$, namely with $\Sigma^{-1}=(B_0B_0^{'})$.
->>>>>>> Stashed changes
 
 ```{r}
 #| echo: true 
 #| message: false
 #| warning: false
-<<<<<<< Updated upstream
-  # setup function for my analysis
-=======
 #| code-fold: true
 #| code-summary: "Basic Model Function"
   # setup function for our analysis
->>>>>>> Stashed changes
   basic.model <- function(bigy, p, S, start, end){
   ############################################################
   N       = ncol(bigy)
@@ -677,11 +452,8 @@ In order to compute our posterior parameters in R, we first specify values for o
   }
   
   A.prior     = matrix(0,K,N)
-<<<<<<< Updated upstream
   A.prior[2:(N+1),] <- diag(c(0,rep(1,N-1))) #0 for the instrument (stationary variable)
-=======
   #A.prior[2:(N+1),] <- diag(c(0,rep(1,N-1))) #0 for the instrument (stationary variable)
->>>>>>> Stashed changes
   V.prior     = (diag(c(1,0.02*((1:p)^(-2))%x%rep(1,N)))) #1 is kappa.2, 0.02 is kappa.1
   S.prior     = diag(N)
   nu.prior    = N+1
@@ -713,60 +485,7 @@ In order to compute our posterior parameters in R, we first specify values for o
   results = list("B" = B.posterior, "A" = A.posterior )
   return(results)
   }
-<<<<<<< Updated upstream
 ```
-
-```{r}
-#| echo: false
-#| #| message: false
-#| warning: false
-  #run the function with my data
-  # y = cbind(instrument,
-  #   log(pce),
-  #   log(indpro),
-  #   greaexus, 
-  #   log(glbinflows),
-  #   dgs1, 
-  #   log(bis), 
-  #   globalf, 
-  #   globalra, 
-  #   log(glbcredit), 
-  #   log(usbdlev), 
-  #   log(eubdlev), 
-  #   usbanksl, 
-  #   eubanksl)
-  
-  #data in selected window
-  # y                   <- window((y), start=c(1990,2), end=c(2010,12))
-  # basic.results <- basic.model(y, 12, 100, c(1990,2), c(2010,12))
-
-```
-
-
-## Extended Model
-
-In the extended model, I set hyperprior parameters for the
-autoregressive parameter $\kappa_A$ to follow an Inverse Gamma 2
-distribution $IG2(\underline{S}_{\kappa},\underline{\nu}_{\kappa})$ and
-$\kappa_{\Sigma}$ hyperprior parameter for the variance-covariance
-matrix to follow a Gamma Distribution
-$G(\underline{S}_{\Sigma},\underline{a}_{\Sigma})$. I will define the
-full conditional posterior of the hyperparameter $\kappa_A$ first.
-
-```{=tex}
-\begin{gather}
-p(\kappa_a | A,\Sigma, Y,X) \propto L(Y|X,A,\Sigma) \times p(\kappa_a) \times p(A|\Sigma,\kappa_a) \times p(\Sigma|\kappa_a) \\ 
-\\ \propto p(\kappa_a) \times p(A|\Sigma,\kappa_a) \\ 
-\\ \propto (\kappa_a)^{-\frac{\underline{\nu_a}+2}{2}} 
-exp\left\{ -\frac{1}{2} \frac{\underline{S_a}}{\kappa_a} \right\}  \times exp\left\{-\frac{1}{2}tr\left[\Sigma^{-1}(A-\underline{A_{\kappa}})^{'} \frac{1}{\kappa}(\underline{V_{\kappa}})^{-1} (A-\underline{A})\right]\right\} \times det(\kappa_a \underline{V})^{-\frac{N}{2}} \\ 
-\\ \propto (\kappa_a)^{-\frac{\underline{\nu_a}_{\kappa_a}+2+NK}{2}} exp \left\{-\frac{1}{2} \frac{1}{\kappa_a} \left[\underline{S_a}_{\kappa_a} + tr \left[\Sigma^{-1}(A-\underline{A})^{'}\underline{V}^{-1}(A-\underline{A}) \right]\right] \right\}
-\end{gather}
-```
-where we can recognise the kernel of an Inverse Gamma 2 Distribution
-with
-=======
-```
-
 ## Extended Model
 In the extended model, we set hyperprior parameters for the autoregressive parameter $\kappa_A$ to follow an Inverse Gamma 2 distribution $IG2(\underline{S}_{\kappa},\underline{\nu}_{\kappa})$ and $\kappa_{\Sigma}$ hyperprior parameter for the variance-covariance matrix to follow a Gamma Distribution $G(\underline{S}_{\Sigma},\underline{a}_{\Sigma})$. We define a hierarchical model to provide flexibility to our model and hopefully reduce uncertainty. We will define the full conditional posterior of the hyperparameter $\kappa_A$ first.
 
@@ -780,7 +499,6 @@ exp\left\{ -\frac{1}{2} \frac{\underline{S_a}}{\kappa_A} \right\}  \times exp\le
 \end{gather}
 ```
 where we recognise the kernel of an Inverse Gamma 2 Distribution with
->>>>>>> Stashed changes
 
 ```{=tex}
 \begin{gather}
@@ -788,21 +506,12 @@ where we recognise the kernel of an Inverse Gamma 2 Distribution with
 \\ \bar{\nu}_a = \underline{\nu}_a+NK
 \end{gather}
 ```
-<<<<<<< Updated upstream
-In addition, I derive similarly the full conditional posterior of the
-hyperparameter $\kappa_{\Sigma}$. \begin{gather}
-p(\kappa_{\Sigma} | A,\Sigma, Y,X) \propto
-p(\kappa_{\Sigma} | A,\Sigma, Y,X) \propto L(Y|X,A,\Sigma) \times p(\kappa_{\Sigma}) \times p(A|\Sigma,\kappa_a) \times p(\Sigma|\kappa_{\Sigma}) \times p(\kappa_a) \\ 
-=======
 In addition, we obtain a similar full conditional posterior of the hyperparameter $\kappa_{\Sigma}$. \begin{gather}
-p(\kappa_{\Sigma} | A,\Sigma, Y,X) \propto
-p(\kappa_{\Sigma} | A,\Sigma, Y,X) \propto L(Y|X,A,\Sigma) \times p(\kappa_{\Sigma}) \times p(A|\Sigma,\kappa_A) \times p(\Sigma|\kappa_{\Sigma}) \times p(\kappa_A) \\ 
->>>>>>> Stashed changes
+p(\kappa_{\Sigma} | A,\Sigma, Y,X) \propto L(Y|X,A,\Sigma) \times p(\kappa_{\Sigma}) \times p(A|\Sigma,\kappa_A) \times p(\Sigma|\kappa_{\Sigma}) \times p(\kappa_A) \\
 \\ \propto p(\kappa_{\Sigma}) \times p(\Sigma|\kappa_{\Sigma}) \\ 
 \\ \propto (\kappa_{\Sigma})^{-\frac{\underline{\nu}N}{2}} 
 exp\left[{ -\frac{1}{2} \frac{\kappa_{\Sigma}}{tr\left [\Sigma^{-1}\underline{s}_{\Sigma} \right ]^{-1}}} \right\}  \times (\kappa_{\Sigma})^{\underline{a}_{\Sigma}-1}exp\left [{-\frac{\kappa_{\Sigma}}{\underline{s}_{\Sigma}}}  \right ] \\
 \\ \propto (\kappa_{\Sigma})^\frac{{}{N\underline{\nu}+2\underline{a}_{\Sigma}-2}}{2}exp\left [{-\frac{\kappa_{\Sigma}}{\left [2tr\left[\Sigma^{-1}\underline{s}_{\Sigma} \right ]^{-1}+\left[\underline{s}_{\Sigma} \right ]^{-1}\right ]^{-1}}}  \right ] \\
-<<<<<<< Updated upstream
 \end{gather} where we can recognise the kernel of an Gamma Distribution
 with \begin{gather}
 \bar{S}_{\Sigma} = {\left [2\left[tr\Sigma^{-1}\underline{s}_{\Sigma} \right ]^{-1}+\left[\underline{s}_{\Sigma} \right ]^{-1}\right ]^{-1}} \\
@@ -822,7 +531,6 @@ We recognize kernel of matrix-normal inverse Wishart distribution, with
 parameters as follows: \begin{gather}
 \bar{V} = (X'X+(\kappa_a \underline{V}))^{-1} \\ 
 \\ \bar{A} = \bar{V}(X'Y+(\kappa_a \underline{V}^{-1}\underline{A})) \\ \\ \bar{S} = I_N\kappa_{\Sigma}+Y'Y+\underline{A}^{'}(\kappa_a \underline{V})^{-1}\underline{A} - \bar{A}^{'} \bar{V}^{-1}\bar{A} \\ 
-=======
 \end{gather} where we can recognise the kernel of an Gamma Distribution with \begin{gather}
 \bar{s}_{\Sigma} = {\left [2\left[tr\Sigma^{-1}\underline{s}_{\Sigma} \right ]^{-1}+\left[\underline{s}_{\Sigma} \right ]^{-1}\right ]^{-1}} \\
 \\ \bar{a}_{\Sigma} = \frac{N\underline{\nu}}{2}+\underline{a}_{\Sigma}
@@ -838,13 +546,11 @@ p(A,\Sigma|X,Y,\kappa_A,\kappa_{\Sigma}) \propto L(A,\Sigma|Y,X) \times p(A|\Sig
 We recognize the kernel of a matrix-normal inverse Wishart distribution, with parameters as follows: \begin{gather}
 \bar{V} = (X'X+(\kappa_A \underline{V}))^{-1} \\ 
 \\ \bar{A} = \bar{V}(X'Y+(\kappa_A \underline{V}^{-1}\underline{A})) \\ \\ \bar{S} = I_N\kappa_{\Sigma}+Y'Y+\underline{A}^{'}(\kappa_A \underline{V})^{-1}\underline{A} - \bar{A}^{'} \bar{V}^{-1}\bar{A} \\ 
->>>>>>> Stashed changes
 \\ \bar{\nu} = T + \underline{\nu}
 \end{gather}
 
 ## Gibbs Sampler
 
-<<<<<<< Updated upstream
 In order to reach our analytical solutions we use a Monte Carlo Markov
 Chain (MCMC) method, namely the Gibbs Sampler procedure. We generate
 random draws from the joint posterior distribution and we update them at
@@ -862,7 +568,6 @@ At each iteration s:
 Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$
 repetitions. Return the output as
 $\left \{ A^{(s)}, \Sigma^{(s)} \right \}^{S2}_{s=S1+1}$.
-=======
 In order to reach our analytical solutions we use a Monte Carlo Markov Chain (MCMC) method, namely the Gibbs Sampler procedure. We generate random draws from the joint posterior distribution and update them at each iteration to compute our posterior distribution parameters. In our case we exploit the following procedure: Initialize $\kappa_A$ and $\kappa_{\Sigma}$ at $\kappa_A^{(0)}$ and $\kappa^{(0)}_{\Sigma}$
 
 At each iteration s:
@@ -872,20 +577,14 @@ At each iteration s:
 3.  Draw $\kappa_{\Sigma}^{(s)} \sim p(\kappa_{\Sigma}|Y,X,A,\Sigma)$
 
 Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$ repetitions. Return the output as $\left \{ A^{(s)}, \Sigma^{(s)} \right \}^{S2}_{s=S1+1}$.
->>>>>>> Stashed changes
-
 ```{r}
 #| echo: true 
 #| message: false
 #| warning: false
-<<<<<<< Updated upstream
-=======
-#| code-fold: true
-#| code-summary: "Extended Model Function"
->>>>>>> Stashed changes
-  extended.model <- function(bigy, p, S1, S2){
+#| code-fold: true  
+#| code-summary: "Extended Model Function 2"
+extended.model <- function(bigy, p, S1, S2){
   ############################################################
-  
   Y       = bigy[(p+1):nrow(bigy),]
   X       = matrix(1,nrow(Y),1)
   for (i in 1:p){
@@ -896,18 +595,6 @@ Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$ repetition
   K       = 1+N*p
   S=S1+S2 #sum of replications
   # set the priors
-<<<<<<< Updated upstream
-  A.prior     = matrix(0,K,N)
-  A.prior[2:(N+1),] <- diag(c(0,rep(1,N-1)))
-  V.prior         = (diag(c(10,1*((1:p)^(-2))%x%rep(1,N)))) #10 is kappa.2, 1 is kappa.1
-  nu.prior        = N+1
-  #kappa.a priors
-  nu.prior.a      = 3        #ig2
-  s.a.prior       = 0.01
-  #kappa.sigma priors
-  s.sigma.prior   = 0.01 #ig2
-  a.sigma.prior   = 1           #rgamma
-=======
   A.prior     = matrix(0,K,N) #try to put is as 0
   #A.prior[2:(N+1),] <- diag(c(0,rep(1,N-1)))
   V.prior         = (diag(c(1,0.02*((1:p)^(-2))%x%rep(1,N)))) #1 is kappa.2, 0.02 is kappa.1
@@ -918,35 +605,20 @@ Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$ repetition
   #kappa.sigma priors
   a.sigma.prior   = 1  #rgamma
   s.sigma.prior   = 0.01
->>>>>>> Stashed changes
   
   A.posterior         = array(rnorm(prod(c(K,N,S))), c(K, N, S))
   B.posterior         = array(NA,c(N,N,S))
   Sigma.post          = array(NA,c(N,N,S))
-<<<<<<< Updated upstream
-  k.sigma             = matrix(NA, S, 1)
-  k.a                 = matrix(NA, S, 1)
-  k.sigma[1] <- 1
-  k.a[1]     <- 1
-    
-  nu.bar      = nrow(Y) + nu.prior
-  nu.bar.a    = nu.prior.a + N*K
-  a.sigma.bar = (N*nu.prior)/2+a.sigma.prior
-  
-=======
   
   k.sigma             = matrix(NA, S, 1)
   k.a                 = matrix(NA, S, 1)
   k.sigma[1] <- 1
   k.a[1]     <- 1
-    
+  
   nu.bar      = nrow(Y) + nu.prior
   nu.bar.a    = nu.prior.a + N*K
   a.sigma.bar = (N*nu.prior)/2+a.sigma.prior
   
-  #
-  
->>>>>>> Stashed changes
   for (s in 1:S) {
     # normal-inverse Wishart, IG2, and Gamma posterior parameters
     ############################################################
@@ -961,17 +633,9 @@ Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$ repetition
     Sigma.posterior     = solve(Sigma.posterior.inv[,,1])
     # Sigma.posterior     = matrix(Sigma.posterior, N, N)
     L                   = t(chol(V.bar))
-<<<<<<< Updated upstream
-    cholSigma.s       = chol(Sigma.posterior)
-    A.posterior[,,s]  = A.bar + L%*%A.posterior[,,s]%*%cholSigma.s
-    
-    s.a.bar     <- s.a.prior + sum(diag( Sigma.posterior.inv[,,1] %*% t(A.posterior[,,s]-A.prior)%*% diag(1/diag(V.prior)) %*% (A.posterior[,,s]-A.prior)))
-=======
     cholSigma.s         = chol(Sigma.posterior)
     A.posterior[,,s]    = A.bar + L%*%A.posterior[,,s]%*%cholSigma.s
-   
     s.a.bar       <- s.a.prior + sum(diag(Sigma.posterior.inv[,,1] %*% t(A.posterior[,,s]-A.prior)%*% diag(1/diag(V.prior)) %*% (A.posterior[,,s]-A.prior)))
->>>>>>> Stashed changes
     s.sigma.bar   <- (2*(sum(diag(Sigma.posterior.inv[,,1]))^-1)+((s.sigma.prior)^-1))^-1
     if (s <= S){
       #draw k.a from IG2
@@ -995,390 +659,24 @@ Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$ repetition
                  "k.a.convergence" = k.a[1:S], 
                  "k.sigma.convergence" = k.sigma[1:S])
   return(results)
-  }
+}
 
 ```
-
-```{r}
-#| echo: false
-#| #| message: false
-#| warning: false
-  extended.result     <- extended.model(y, 12, 500, 10000) #data, lag, S1 burn in, S2 repetitions to keep
-```
-
 ## Artificial Data
-
-<<<<<<< Updated upstream
-I generate two random walks $y1$ and $y2$ with 1000 observations each
-simulated from a bivariate Gaussian random walk process. I plot the raw
-series and the first difference below:
-=======
 We generate two random walks $y1$ and $y2$ with 1000 observations each simulated from a bivariate Gaussian random walk process. We plot the raw series and the first difference below:
->>>>>>> Stashed changes
 
 ```{r}
 #| echo: true 
 #| message: false
 #| warning: false
-<<<<<<< Updated upstream
-  #artificial data with 1000 observations from a bi-variate Gaussian random walk
-  #VAR model with N=2, p=1, and a constant term
-  # simulate 1000 samples from the bivariate Gaussian random walk process with cumsum(rnorm())
-=======
 #| code-fold: true
 #| code-summary: "Artificial Data"
->>>>>>> Stashed changes
+  set.seed(420)
   y1 <- ts(cumsum(rnorm(1000, 0, sd=1)))
   y2 <- ts(cumsum(rnorm(1000, 0, sd=1)))
   y.art <- cbind(y1,y2)
-  
-  par(mfrow=c(1,2),mar=c(2,2,2,2))
-  plot(y.art, 1:1000, type = "l", main = "Artificial data", ylab="", xlab="")
   plot(diff(y.art), 1:1000, type = "l", main = "Artificial data first difference", ylab="", xlab="")
-<<<<<<< Updated upstream
 ```
-
-Then, I use my two functions from the basic and extended model to
-simulate the posterior of the intercept term. I show in the plots that
-for 10 thousand draws I get an intercept close to zero for the $A_{1,1}$
-and $A_{1,2}$ values, and an identity matrix for the $B_{1,1}$ and
-$B_{2,2}$ values.
-
-```{r}
-#| echo: true
-#| message: false
-#| warning: false
-  set.seed(420)
-  basic.artificial <- basic.model(y.art, 1, 10000, c(), c())
-  extended.artificial <- extended.model(y.art, 1, 1000, 9000)
-  B.basic    <- basic.artificial$B
-  A.basic    <- basic.artificial$A
-  B.extended <- extended.artificial$B.convergence
-  A.extended <-extended.artificial$A.convergence
-  
-  par(mfrow=c(4,2),mar=c(2,2,3,2))
-  plot(1:10000, B.basic[1,1,], type = "l", main = expression(paste("basic " , B[11])), lwd=0.3, ylab="", xlab="", col="royalblue")
-    plot(1:10000, B.basic[2,2,], type = "l", main = expression(paste("basic " , B[22])), lwd=0.3, ylab="", xlab="", col="royalblue")
-  plot(1:10000, A.basic[1,1,], type = "l", main = expression(paste("basic " , A[11])), lwd=0.4, ylab="", xlab="", col="tomato")
-  plot(1:10000, A.basic[1,2,], type = "l", main = expression(paste("basic " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato")
-  plot(1:10000, B.extended[1,1,], type = "l", main = expression(paste("extended " , B[11])), lwd=0.3, ylab="", xlab="", col="royalblue3")
-  plot(1:10000, B.extended[2,2,], type = "l", main = expression(paste("extended " , B[22])), lwd=0.3, ylab="", xlab="", col="royalblue3")
-  plot(1:10000, A.extended[1,1,], type = "l", main = expression(paste("extended " , A[11])), lwd=0.4, ylab="", xlab="", col="tomato3")
-  plot(1:10000, A.extended[1,2,], type = "l", main = expression(paste("extended " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato3")
-  
-
-  
-  
-  
-    par(mfrow=c(2,2),mar=c(2,2,3,2))
-  plot(1:10000, extended.result$B[1,1,], type = "l", main = expression(paste("basic " , B[11])), lwd=0.3, ylab="", xlab="", col="royalblue")
-    plot(1:10000, extended.result$B[2,2,], type = "l", main = expression(paste("basic " , B[22])), lwd=0.3, ylab="", xlab="", col="royalblue")
-  plot(1:10000, extended.result$A[1,1,], type = "l", main = expression(paste("basic " , A[11])), lwd=0.4, ylab="", xlab="", col="tomato")
-  plot(1:10000, extended.result$A[1,2,], type = "l", main = expression(paste("basic " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato")
-```
-
-Moreover, I also plot the histograms of the values $\kappa_a$ and
-$\kappa_{\Sigma}$ outlining their mean value. I also add a vertical line
-to define the mean parameter for all the draws. The initial values for
-both parameters was set equal to one.
-
-```{r}
-#| echo: true 
-#| message: false
-#| warning: false
-  par(mfrow=c(1,2),mar=c(2,2,2,2))
-  hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[a])), border=F, xlim=c(0,0.5))
-  abline(v = mean(extended.artificial$k.a.convergence), col='purple4', lwd = 2)
-  hist(extended.artificial$k.sigma.convergence, breaks=1000, col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
-  abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
-```
-
-
-## Impulse Response Functions
-
-My model comprises the instrument in the first position, and I will
-compute impulse response functions assuming that the instrument will
-affect all the other variables exogenously. The assumptions of
-@MollerWolf2021LPVARS are satisfied given our Bayesian framework and our
-cholesky decomposition: $$
-\begin{bmatrix}
-b_0^{1,1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{2,1} & b_0^{2,2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{3,1} & b_0^{3,2} & b_0^{3,3} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{4,1} & b_0^{4,2} & b_0^{4,3} & b_0^{4,4} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{5,1} & b_0^{5,2} & b_0^{5,3} & b_0^{5,4} & b_0^{5,5} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{6,1} & b_0^{6,2} & b_0^{6,3} & b_0^{6,4} & b_0^{6,5} & b_0^{6,6} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{7,1} & b_0^{7,2} & b_0^{7,3} & b_0^{7,4} & b_0^{7,5} & b_0^{7,6} & b_0^{7,7} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{8,1} & b_0^{8,2} & b_0^{8,3} & b_0^{8,4} & b_0^{8,5} & b_0^{8,6} & b_0^{8,7} & b_0^{8,8} & 0 & 0 & 0 & 0 & 0 & 0 \\
-b_0^{9,1} & b_0^{9,2} & b_0^{9,3} & b_0^{9,4} & b_0^{9,5} & b_0^{9,6} & b_0^{9,7} & b_0^{9,8} & b_0^{9,9} & 0 & 0 & 0 & 0 & 0 \\
-b_0^{10,1} & b_0^{10,2} & b_0^{10,3} & b_0^{10,4} & b_0^{10,5} & b_0^{10,6} & b_0^{10,7} & b_0^{10,8} & b_0^{10,9} & b_0^{10,10} & 0 & 0 & 0 & 0 \\
-b_0^{11,1} & b_0^{11,2} & b_0^{11,3} & b_0^{11,4} & b_0^{11,5} & b_0^{11,6} & b_0^{11,7} & b_0^{11,8} & b_0^{11,9} & b_0^{11,10} & b_0^{11,11} & 0 & 0 & 0 \\
-b_0^{12,1} & b_0^{12,2} & b_0^{12,3} & b_0^{12,4} & b_0^{12,5} & b_0^{12,6} & b_0^{12,7} & b_0^{12,8} & b_0^{12,9} & b_0^{12,10} & b_0^{12,11} & b_0^{12,12} & 0 & 0 \\
-b_0^{13,1} & b_0^{13,2} & b_0^{13,3} & b_0^{13,4} & b_0^{13,5} & b_0^{13,6} & b_0^{13,7} & b_0^{13,8} & b_0^{13,9} & b_0^{13,10} & b_0^{13,11} & b_0^{13,12} & b_0^{13,13} & 0 \\
-b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_0^{14,7} & b_0^{14,8} & b_0^{14,9} & b_0^{14,10} & b_0^{14,11} & b_0^{14,12} & b_0^{14,13} & b_0^{14,14} \\
-\end{bmatrix}
-\begin{bmatrix}
-\text{instrument} \\
-\text{pce} \\
-\text{indpro} \\
-\text{greaexus} \\
-\text{glbinflows} \\
-\text{dgs1} \\
-\text{bis} \\
-\text{globalf} \\
-\text{globalra} \\
-\text{glbcrexus} \\
-\text{usbdlev} \\
-\text{eubdlev} \\
-\text{usbanksl} \\
-\text{eubanksl} \\
-\end{bmatrix}
-$$
-
-```{r}
-#| echo: false 
-#| message: false
-#| warning: false
-  
-  # Impulse response functions
-  # Forecast Error Variance Decomposition
-  ###########################################################
-  set.seed(420)
-  y = cbind(instrument,
-    (pce),
-    (indpro),
-    (greaexus), 
-    (glbinflows),
-    dgs1, 
-    bis, 
-    globalf, 
-    globalra, 
-    (glbcrexus), 
-    (usbdlev), 
-    (eubdlev), 
-    (usbanksl), 
-    (eubanksl))
-  
-    # y = cbind(instrument,
-    # log(pce),
-    # log(indpro),
-    # greaexus, 
-    # log(glbinflows),
-    # dgs1, 
-    # log(bis), 
-    # globalf, 
-    # globalra, 
-    # log(glbcredit), 
-    # log(usbdlev), 
-    # log(eubdlev), 
-    # usbanksl, 
-    # eubanksl)
-```
-  
-
-```{r}
-#| echo: true 
-#| message: false  
-#| warning: false
-  # Impulse response functions
-  # Forecast Error Variance Decomposition
-  ###########################################################
-  set.seed(420)
-  y                   <- window((y), start=c(1990,2), end=c(2010,12))
-  basic.results <- basic.model(y, 12, 10000, c(1990,2), c(2010,12))
-  N=ncol(y)
-  h=24
-  p=12
-  S=10000 #S2 draws of the extended model
-  IRF.posterior     = array(NA,c(N,N,h+1,S))
-  IRF.inf.posterior = array(NA,c(N,N,S))
-  FEVD.posterior    = array(NA,c(N,N,h+1,S))
-  J                 = cbind(diag(N),matrix(0,N,N*(p-1))) #[I_N,0_{NxN(p-1)}]
-  
-  for (s in 1:S){
-  A.bold          = rbind(t(basic.results$A[2:(1+N*p),,s]),cbind(diag(N*(p-1)),matrix(0,N*(p-1),N)))  #rbind([A1...AP], cbind(I_{N(p-1)}, 0_{N(p-1)xN}))
-  IRF.inf.posterior[,,s]          = J %*% solve(diag(N*p)-A.bold) %*% t(J) #J*(I-A)^-1*J'
-  A.bold.power    = A.bold
-  for (i in 1:(h+1)){
-    if (i==1){
-      IRF.posterior[,,i,s]        = basic.results$B[,,s] #first value is first IRF
-    } else {
-      IRF.posterior[,,i,s]        = J %*% A.bold.power %*% t(J) %*%basic.results$B[,,s] #J*A*J'*B.posterior
-      A.bold.power                = A.bold.power %*% A.bold
-    }
-    for (n in 1:N){
-    for (nn in 1:N){
-    FEVD.posterior[n,nn,i,s]  = sum(IRF.posterior[n,nn,1:i,s]^2)
-     }
-    }
-    FEVD.posterior[,,i,s]         = diag(1/apply(FEVD.posterior[,,i,s],1,sum))%*%FEVD.posterior[,,i,s]
-  }
-}
-  FEVD.posterior    = 100*FEVD.posterior
-
-  #save(IRF.posterior,IRF.inf.posterior, FEVD.posterior, file=("irf-instrument-fevd.RData"))
-
-  # colours for IRFs
-  ############################################################
-  mcxs2  = "#379683"
-  mcxs3  = "#5CDB95"
-  mcxs4  = "#8EE4AF"
-  mcxs3.rgb   = col2rgb(mcxs3)
-  mcxs3.shade1= rgb(mcxs3.rgb[1],mcxs3.rgb[2],mcxs3.rgb[3], alpha=120, maxColorValue=255)
-  mcxs4.rgb   = col2rgb(mcxs4)
-  mcxs4.shade1= rgb(mcxs4.rgb[1],mcxs4.rgb[2],mcxs4.rgb[3], alpha=120, maxColorValue=255)
-
-
-  # plot IRFs extended model
-  ############################################################
-  #load("irf-instrument-fevd.RData")
-  IRF.posterior.inst = IRF.posterior[,1,,] #takes the instruments IRFs
-  IRFs.k1           = apply(IRF.posterior.inst,1:2,median) #mean of the S IRFs
-  IRFs.inf.k1       = apply(IRF.posterior.inst,1,mean)
-  rownames(IRFs.k1) = y.names
-
-  IRFs.k1.hdi    = apply(IRF.posterior.inst,1:2,hdi, credMass=0.68)
-  IRFs.k1.hdi2    = apply(IRF.posterior.inst,1:2,hdi, credMass=0.9)
-  hh          = 1:(h+1)
-  #pdf(file="FF-irf-mps1.pdf", height=9, width=12)
-  par(mfrow=c(5,2), mar=c(2, 2, 2, 1.5),cex.axis=0.8, cex.lab=0.8, cex.main=0.9)
-  IRFs.wanted      <- c(2,3,4,5,6,7,9,10,12,14)
-  for (n in 1:14){
-    if (n %in% IRFs.wanted) {
-  ylims     = range(IRFs.k1[n,hh],IRFs.k1.hdi[,n,1:4],0)
-  plot(hh,IRFs.k1[n,hh], type="l", ylim=ylims, axes=FALSE, xlab="", ylab="", main =rownames(IRFs.k1)[n])
-  lines(hh, IRFs.k1[n,hh], lwd=2, col=mcxs2)
-  axis(1,c(4,8,12,16,20,24),c("4","8","12","16","20","24"))
-  axis(2,c(ylims[1],0,ylims[2]),round(c(ylims[1],0,ylims[2]),3))
-  polygon(c(hh,(h+1):1), c(IRFs.k1.hdi[1,n,hh],IRFs.k1.hdi[2,n,(h+1):1]), col=mcxs3.shade1,border=mcxs3.shade1)
-  polygon(c(hh,(h+1):1), c(IRFs.k1.hdi2[1,n,hh],IRFs.k1.hdi2[2,n,(h+1):1]), col=mcxs4.shade1,border=mcxs4.shade1)
-  abline(h=0)
-    }
-  }
-```
-
-```{r}
-#| echo: true 
-#| message: false
-#| warning: false
-
-  # colours for FEVDs
-  ############################################################
-  colours = c("deepskyblue1","deepskyblue2","deepskyblue","deepskyblue3","deepskyblue4","dodgerblue",
-           "dodgerblue1","dodgerblue2","maroon1","maroon","maroon2","magenta","maroon3","maroon4")
-
-  # plot FEVDs for instrument shock
-  ############################################################
-  fevd.dgs1  = apply(FEVD.posterior[6,,,],1:2,mean) #real gdp
-  fevd.dgs1  = rbind(rep(0,h+1),apply(fevd.dgs1,2,cumsum))
-
-  #pdf(file="fevd-inst.pdf", height=7, width=12)
-  par(mar=rep(4,4),cex.axis=1, cex.lab=0.8)
-  plot(hh,fevd.dgs1[1,], type="n", ylim=c(0,100), axes=FALSE, xlab="", ylab="")
-  axis(1,hh,c("","","","","","","","","","","","1 year","","","","","","","","","","","","2 years",""))
-  axis(2,c(0,50,100),c("","FEVD[inst]",""))
-  for (n in 1:N){
-   polygon(c(hh,(h+1):1), c(fevd.dgs1[n,hh],fevd.dgs1[n+1,(h+1):1]), col=colours[n],border=colours[n])
-  }  
-  axis(4, (0.5*(fevd.dgs1[1:14,9]+fevd.dgs1[2:15,9]))[c(1,2)], c("inst", "pce"))
-```
-
-
-```{r} 
-#| echo: true 
-#| message: false
-#| warning: false
-  fevd.inst  = apply(FEVD.posterior[2,,,],1:2,mean) #real gdp
-  fevd.inst  = rbind(rep(0,h+1),apply(fevd.inst,2,cumsum))
-
-  #pdf(file="fevd-inst.pdf", height=7, width=12)
-  par(mar=rep(4,4),cex.axis=1, cex.lab=0.8)
-  plot(hh,fevd.inst[1,], type="n", ylim=c(0,100), axes=FALSE, xlab="", ylab="")
-  axis(1,hh,c("","","","","","","","","","","","1 year","","","","","","","","","","","","2 years",""))
-  axis(2,c(0,50,100),c("","FEVD[inst]",""))
-  for (n in 1:N){
-   polygon(c(hh,(h+1):1), c(fevd.inst[n,hh],fevd.inst[n+1,(h+1):1]), col=colours[n],border=colours[n])
-  }  
-  axis(4, (0.5*(fevd.inst[1:14,9]+fevd.inst[2:15,9]))[c(2,4,9,10)], c("pce","greaexus","globalra","glbcredit"))
-```
-
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-  
-  # Impulse response functions extended model
-  # Forecast Error Variance Decomposition
-  ###########################################################
-#   set.seed(420)
-#   y = cbind(instrument,
-#     (pce),
-#     (indpro),
-#     (greaexus),
-#     (glbinflows),
-#     dgs1,
-#     bis,
-#     globalf,
-#     globalra,
-#     (glbcrexus),
-#     (usbdlev),
-#     (eubdlev),
-#     (usbanksl),
-#     (eubanksl))
-# 
-#     # y = cbind(instrument,
-#     # log(pce),
-#     # log(indpro),
-#     # greaexus,
-#     # log(glbinflows),
-#     # dgs1,
-#     # log(bis),
-#     # globalf,
-#     # globalra,
-#     # log(glbcredit),
-#     # log(usbdlev),
-#     # log(eubdlev),
-#     # usbanksl,
-#     # eubanksl)
-# 
-# 
-#   y                  <- window((y), start=c(1990,2), end=c(2010,12))
-#   extended.results <- extended.model(y, 12, 1000, 5000)
-#   S=5000 #S2 draws of the extended model
-#   IRF.posterior     = array(NA,c(N,N,h+1,S))
-#   IRF.inf.posterior = array(NA,c(N,N,S))
-#   FEVD.posterior    = array(NA,c(N,N,h+1,S))
-#   J                 = cbind(diag(N),matrix(0,N,N*(p-1))) #[I_N,0_{NxN(p-1)}]
-# 
-#   for (s in 1:S){
-#   A.bold          = rbind(t(extended.results$A[2:(1+N*p),,s]),cbind(diag(N*(p-1)),matrix(0,N*(p-1),N)))  #rbind([A1...AP], cbind(I_{N(p-1)}, 0_{N(p-1)xN}))
-#   IRF.inf.posterior[,,s]          = J %*% solve(diag(N*p)-A.bold) %*% t(J) #J*(I-A)^-1*J'
-#   A.bold.power    = A.bold
-#   for (i in 1:(h+1)){
-#     if (i==1){
-#       IRF.posterior[,,i,s]        = extended.results$B[,,s] #first value is first IRF
-#     } else {
-#       IRF.posterior[,,i,s]        = J %*% A.bold.power %*% t(J) %*%extended.results$B[,,s] #J*A*J'*B.posterior
-#       A.bold.power                = A.bold.power %*% A.bold
-#     }
-#     for (n in 1:N){
-#     for (nn in 1:N){
-#     FEVD.posterior[n,nn,i,s]  = sum(IRF.posterior[n,nn,1:i,s]^2)
-#      }
-#     }
-#     FEVD.posterior[,,i,s]         = diag(1/apply(FEVD.posterior[,,i,s],1,sum))%*%FEVD.posterior[,,i,s]
-#   }
-# }
-#   FEVD.posterior    = 100*FEVD.posterior
-
-  #save(IRF.posterior,IRF.inf.posterior, FEVD.posterior, file=("irf-instrument-fevd2.RData"))
-
-
-=======
->>>>>>> Stashed changes
-```
-
 Then, we use our two functions from the basic and extended model to simulate the intercept term posterior. We show in the plot that for 10 thousand draws we get an intercept close to zero for the $A_{1,1}$ and $A_{1,2}$ values. In addition, we get an identity matrix for the $B_{1,1}$ and $B_{2,2}$ values. Hence, the function works as we want.
 
 ```{r}
@@ -1409,7 +707,7 @@ Then, we use our two functions from the basic and extended model to simulate the
   plot(1:10000, A.extended[1,2,], type = "l", main = expression(paste("extended " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato3")
 ```
 
-Moreover, we also plot the histograms of the values $\kappa_A$ and $\kappa_{\Sigma}$ outlining their mean value. We also add a vertical line to define the mean parameter for all draws. In our original function, we have set the $\kappa_{Sigma}$ initial value to $0.02$ and the results from the ten thousand draws indicate that the posterior median is $\backsim1.3$. Similarly, we set the initial value of $\kappa_{Sigma}$ to one and obtain a posterior distribution with a median $\sim 6.6$.
+Moreover, we also plot the histograms of the values $\kappa_A$ and $\kappa_{\Sigma}$ outlining their mean value. We also add a vertical line to define the mean parameter for all draws. In our original function, we have set the $\kappa_{Sigma}$ initial value to 1 and the results from 20 thousand draws indicate that the posterior median is $\backsim0.04$. Similarly, we set the initial value of $\kappa_A$ to one and obtain a posterior distribution with a median $\sim 14.9$.
 
 ```{r}
 #| echo: true 
@@ -1418,9 +716,9 @@ Moreover, we also plot the histograms of the values $\kappa_A$ and $\kappa_{\Sig
 #| code-fold: true
 #| code-summary: "Kappas Histograms Artifical Data"
   par(mfrow=c(1,2),mar=c(2,2,2,2))
-  hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[A])), border=F, xlim=c(0,15))
+  hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[A])), border=F, xlim=c(0,30))
   abline(v = mean(extended.artificial$k.a.convergence), col='purple4', lwd = 2)
-  hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis", col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
+  hist(extended.artificial$k.sigma.convergence, breaks="Freedman-Diaconis", col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F, xlim=c(0,0.15))
   abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
 ```
 
@@ -1458,7 +756,7 @@ $$ \underline{S}_A=0.5\\
 #| code-summary: "Kappas Histograms Extended Model"
   extended.results       <- extended.model(y, 4, 500, 20000)
   par(mfrow=c(1,2),mar=c(2,2,2,2))
-  hist(extended.results$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[A])), border=F)
+  hist(extended.results$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[A])), border=F, xlim=c(12,22.5))
   abline(v = mean(extended.results$k.a.convergence), col='purple4', lwd = 2)
   hist(extended.results$k.sigma.convergence, breaks="Freedman-Diaconis", col='royalblue', main = expression(paste("Covariance Hyperparameter ", kappa[Sigma])), border=F)
   abline(v = mean(extended.results$k.sigma.convergence), col='purple4', lwd = 3)
@@ -1505,9 +803,9 @@ b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_
 \text{Lev. EU Banks} \\
 \end{bmatrix}$$
 ### IRFs Basic Model
-We will outline IRFs for both our basic and extended models, computing 20 thousand draws for our estimates. @miranda2020us normalise the IRFs so that the Treasury rate has a percentage point increase at horizon 0, but we do not include this normalisation. Because of this, we cannot interpret the degree of shock as the authors do.
-From the 14 variables, we present only ten of them. I abstain from plotting the global factor because it is simply computed as the inverse of global risk aversion. In addition, I do not plot US brokers & dealers' leverage and US banks’ leverage. This is because our main interests lies in spillovers of monetary policy outside the US. The abscissa scale is in months, given that we use monthly variables, and display the 68% and 90% density intervals.
-Out of the ten IRF plots, half coincide with the authors' results. I will briefly outline the results.
+We will outline IRFs for both our basic and extended models, computing 20 thousand draws for our estimates. @miranda2020us normalize the IRFs so that the Treasury rate has a percentage point increase at horizon 0, but we do not include this normalization. Because of this, we cannot interpret the degree of shock as the authors do.
+From the 14 variables, we present only ten of them. We abstain from plotting the global factor because it is simply computed as the inverse of global risk aversion. In addition, we do not plot US brokers & dealers' leverage and US banks’ leverage. This is because our main interests lies in spillovers of monetary policy outside the US. The abscissa scale is in months, given that we use monthly variables, and display the 68% and 90% density intervals.
+Out of the ten IRF plots, half coincide with the authors' results. We will briefly outline the results.
 -Upon realisation, the one-year Treasury rate spikes in the first quarter, decreases in the third quarter and then hovers around zero in the remaining lags;
 -we would expect the PCE deflator to shrink, but it provides insignificant results in the first two quarters and increases thereafter;
 -industrial production shrinks in the first three quarters, and then mean-reverts but in insignificant bands;
@@ -1525,7 +823,6 @@ Out of the ten IRF plots, half coincide with the authors' results. I will briefl
   # Impulse response functions basic model
   # Forecast Error Variance Decomposition
   ###########################################################
-  set.seed(420)
   basic.results       <- basic.model(y, 12, 20000, c(1990,2), c(2010,12))
   N=ncol(y)
   h=24
@@ -1568,7 +865,7 @@ Out of the ten IRF plots, half coincide with the authors' results. I will briefl
   mcxs4.shade1= rgb(mcxs4.rgb[1],mcxs4.rgb[2],mcxs4.rgb[3], alpha=120, maxColorValue=255)
 
 
-  # plot IRFs extended model
+  # plot IRFs basic model
   ############################################################
   #load("irf-instrument-fevd.RData")
   IRF.posterior.inst = IRF.posterior[,1,,] #takes the instruments IRFs
