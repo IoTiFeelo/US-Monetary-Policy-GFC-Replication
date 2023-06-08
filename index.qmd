@@ -827,7 +827,21 @@ extended.model <- function(bigy, p, S1, S2){
 
 We generate two random walks $y1$ and $y2$ with 1000 observations each
 simulated from a bivariate Gaussian random walk process. We plot the raw
-series and the first difference below.
+series and the first difference below:
+
+```{r}
+#| echo: true 
+#| message: false
+#| warning: false
+#| code-fold: true
+#| code-summary: "Artificial Data"
+  set.seed(420)
+  y1 <- ts(cumsum(rnorm(1000, 0, sd=1)))
+  y2 <- ts(cumsum(rnorm(1000, 0, sd=1)))
+  y.art <- cbind(y1,y2)
+  plot(diff(y.art), 1:1000, type = "l", main = "Artificial data first difference", ylab="", xlab="")
+```
+
 Then, we use our two functions from the basic and extended model to
 simulate the intercept term posterior. We show in the plot that for 10
 thousand draws we get an intercept close to zero for the $A_{1,1}$ and
@@ -841,9 +855,6 @@ $B_{1,1}$ and $B_{2,2}$ values. Hence, the function works as we want.
 #| code-fold: true
 #| code-summary: "Artificial Data Results"
   set.seed(420)
-  y.art <- cbind(ts(cumsum(rnorm(1000, 0, sd=1))),ts(cumsum(rnorm(1000, 0, sd=1))))
-  par(mfrow=c(1,2),mar=c(2,2,2,2))
-  plot(diff(y.art), 1:1000, type = "l", main = "Artificial data first difference", ylab="", xlab="")
   basic.artificial <- basic.model(y.art, 1, 10000, c(), c())
   extended.artificial <- extended.model(y.art, 1, 1000, 9000)
   B.basic    <- basic.artificial$B
@@ -989,7 +1000,8 @@ b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_
 \text{Lev. EU Banks} \\
 \end{bmatrix}
 ```
-## IRFs Basic Model
+
+### IRFs Basic Model
 
 We will outline IRFs for both our basic and extended models, computing
 20 thousand draws for our estimates. @miranda2020us normalize the IRFs
