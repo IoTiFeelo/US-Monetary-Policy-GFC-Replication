@@ -31,14 +31,44 @@ with simplifications given the time scope of the Macroeconometrics
 course taught by Dr. [Tomasz
 Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak).
 The specific challenge will be writing R codes to disentangle their
+framework. We replicate @miranda2020us, Review of Economic Studies. In
+their paper, the authors jointly evaluate the effects of financial,
+monetary and real variables, in the U.S. and abroad, following a 1%
+shock of the Federal Reserve (FED) interest rate. In particular, the
+authors rely on an instrumental variable to identify U.S. monetary
+policy shocks. This is to avoid implausible restrictions on their
+variable of interest. Our task will be to understand the model of these
+two scholars and replicate it with simplifications given the time scope
+of the Macroeconometrics course taught by Dr. [Tomasz
+Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak).
+The specific challenge will be writing R codes to disentangle their
 framework.
-We replicate @miranda2020us, Review of Economic Studies. In their paper, the authors jointly evaluate the effects of financial, monetary and real variables, in the U.S. and abroad, following a 1% shock of the Federal Reserve (FED) interest rate. In particular, the authors rely on an instrumental variable to identify U.S. monetary policy shocks. This is to avoid implausible restrictions on their variable of interest. Our task will be to understand the model of these two scholars and replicate it with simplifications given the time scope of the Macroeconometrics course taught by Dr. [Tomasz Woźniak](https://findanexpert.unimelb.edu.au/profile/426516-tomasz-wozniak). The specific challenge will be writing R codes to disentangle their framework.
 
 # The Paper
 
 ## Global Factor in Risky Asset Prices
 
-[Miranda-Agrippino and Rey](http://helenerey.eu/Content/_Documents/MirandaAgrippinoRey_REStud_Final.pdf) in the first part of the paper estimate a global factor to proxy the movement of world risky asset prices. They do so by collecting 858 prices of different risky assets traded in North America, Latin America, Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is to pick a representative market index (i.e. S&P 500) for each market at the end of 2012, including all of its components, selecting prices that allow them to cover at least 80% of cross sectional observations by 1990 and 95% in 1995. They do so to avoid over-representation of each category. They use first difference log-priced series. With this global factor, they can explain over 20% of global risky asset price volatility in their time span. Given the small time frame and VAR analysis limitations, they estimate a global factor with commodities from the U.S., Europe, and Japan, spanning back to 1975. This factor covers 60% of the volatility in this period. The appendix of the paper provides detailed information on this VAR estimation. To provide more intuition on this factor, the authors correlate it with some indexes of implied volatility such as the VIX, outlining its co-movement with common measures of market variation (in this case a negative correlation). The global factor will be used later in the impulse-response section.
+[Miranda-Agrippino and
+Rey](http://helenerey.eu/Content/_Documents/MirandaAgrippinoRey_REStud_Final.pdf)
+in the first part of the paper estimate a global factor to proxy the
+movement of world risky asset prices. They do so by collecting 858
+prices of different risky assets traded in North America, Latin America,
+Europe, Asia Pacific, and Australia, from 1990 to 2012. Their method is
+to pick a representative market index (i.e. S&P 500) for each market at
+the end of 2012, including all of its components, selecting prices that
+allow them to cover at least 80% of cross sectional observations by 1990
+and 95% in 1995. They do so to avoid over-representation of each
+category. They use first difference log-priced series. With this global
+factor, they can explain over 20% of global risky asset price volatility
+in their time span. Given the small time frame and VAR analysis
+limitations, they estimate a global factor with commodities from the
+U.S., Europe, and Japan, spanning back to 1975. This factor covers 60%
+of the volatility in this period. The appendix of the paper provides
+detailed information on this VAR estimation. To provide more intuition
+on this factor, the authors correlate it with some indexes of implied
+volatility such as the VIX, outlining its co-movement with common
+measures of market variation (in this case a negative correlation). The
+global factor will be used later in the impulse-response section.
 
 ```{r}
 #| echo: false
@@ -159,19 +189,48 @@ ggplot() +
 
 ## Proxy-VAR Analysis with Rich-Information Bayesian VAR
 
-In this project, we will avoid the computation of the global factor, because it is out of scope of the Macroeconomerics subject. Instead, we will concentrate on the Bayesian VAR analysis of Miranda-Agrippino and Rey. A main reason why the authors studied the monetary effects of U.S. interest rate changes is that the dollar is the currency of global banking. A change in FED monetary policy affects banks' borrowing capacity, the pricing of dollar denominated assets, and cross-border capital flows. In order to isolate its effects, the two scholars identify U.S. monetary policy shocks by exploiting 30-min price revisions around Federal Open Market Committee ([FOMC](https://www.federalreserve.gov/monetarypolicy/fomc.htm)) announcements in the fourth federal funds futures contracts ([FF4](https://www.investopedia.com/terms/f/fed-funds-futures.asp)). The intuition is that these [futures](https://www.investopedia.com/terms/f/futures.asp) have an average maturity of three months, and they can predict revisions of market expectations about future monetary policy one-quarter in advance. This assumption holds only if market participants can distinguish between the systematic component of policy and any observable policy action. Moreover, with asymmetrical information, the FF4 revisions contain information about the influence of economic factors relevant to U.S. monetary policy. Policy announcements provide this information implicitly.
+In this project, we will avoid the computation of the global factor,
+because it is out of scope of the Macroeconomerics subject. Instead, we
+will concentrate on the Bayesian VAR analysis of Miranda-Agrippino and
+Rey. A main reason why the authors studied the monetary effects of U.S.
+interest rate changes is that the dollar is the currency of global
+banking. A change in FED monetary policy affects banks' borrowing
+capacity, the pricing of dollar denominated assets, and cross-border
+capital flows. In order to isolate its effects, the two scholars
+identify U.S. monetary policy shocks by exploiting 30-min price
+revisions around Federal Open Market Committee
+([FOMC](https://www.federalreserve.gov/monetarypolicy/fomc.htm))
+announcements in the fourth federal funds futures contracts
+([FF4](https://www.investopedia.com/terms/f/fed-funds-futures.asp)). The
+intuition is that these
+[futures](https://www.investopedia.com/terms/f/futures.asp) have an
+average maturity of three months, and they can predict revisions of
+market expectations about future monetary policy one-quarter in advance.
+This assumption holds only if market participants can distinguish
+between the systematic component of policy and any observable policy
+action. Moreover, with asymmetrical information, the FF4 revisions
+contain information about the influence of economic factors relevant to
+U.S. monetary policy. Policy announcements provide this information
+implicitly.
 
 # The Data
 
-We download the data directly from the website of [Miranda-Agrippino](http://silviamirandaagrippino.com/code-data). The two authors study the consequences of a 1% increase in the U.S. monetary policy considering:
+We download the data directly from the website of
+[Miranda-Agrippino](http://silviamirandaagrippino.com/code-data). The
+two authors study the consequences of a 1% increase in the U.S. monetary
+policy considering:
 
--a domestic VAR with the effects on domestic financial markets and macroeconomic aggregates in the United States;
+-a domestic VAR with the effects on domestic financial markets and
+macroeconomic aggregates in the United States;
 
--a global VAR with the effects on global asset markets, global domestic credit and international capital flows;
+-a global VAR with the effects on global asset markets, global domestic
+credit and international capital flows;
 
--a "floaters" VAR to study if a fixed or pegged exchange rate affects the global contraction.
+-a "floaters" VAR to study if a fixed or pegged exchange rate affects
+the global contraction.
 
-We will study the global specifications, and include the following variables:
+We will study the global specifications, and include the following
+variables:
 
 ```{r}
 #| echo: true 
@@ -257,24 +316,82 @@ fed.gdp.plot <-  (ggplot(data=data) +
 ```
 
 ## Data Description
-Against this framework, our interest is to study the degree by which U.S. monetary policy shocks can propagate throughout the world's economies. In order to have a global picture we study macroeconomic variables that can affect and influence a FED change in the interest rate. The global variables are constructed by scrutinizing these countries: Argentina, Australia, Austria, Belarus, Belgium, Bolivia, Brazil, Bulgaria, Canada, Chile, Colombia, Costa Rica, Croatia, Cyprus, Czech Republic, Denmark, Ecuador, Finland, France, Germany, Greece, Hong Kong, Hungary, Iceland, Indonesia, Ireland, Italy, Japan, Latvia, Lithuania, Luxembourg, Malaysia, Malta, Mexico, Netherlands, New Zealand, Norway, Poland, Portugal, Romania, Russia, Serbia, Singapore, Slovakia, Slovenia, South Africa, South Korea, Spain, Sweden, Switzerland, Thailand, Turkey, U.K., and the U.S.
 
-As discussed in the previous section, we are ìncluding the variables of the global VAR of @miranda2020us. In the first graph, we include the following variables: 
+Against this framework, our interest is to study the degree by which
+U.S. monetary policy shocks can propagate throughout the world's
+economies. In order to have a global picture we study macroeconomic
+variables that can affect and influence a FED change in the interest
+rate. The global variables are constructed by scrutinizing these
+countries: Argentina, Australia, Austria, Belarus, Belgium, Bolivia,
+Brazil, Bulgaria, Canada, Chile, Colombia, Costa Rica, Croatia, Cyprus,
+Czech Republic, Denmark, Ecuador, Finland, France, Germany, Greece, Hong
+Kong, Hungary, Iceland, Indonesia, Ireland, Italy, Japan, Latvia,
+Lithuania, Luxembourg, Malaysia, Malta, Mexico, Netherlands, New
+Zealand, Norway, Poland, Portugal, Romania, Russia, Serbia, Singapore,
+Slovakia, Slovenia, South Africa, South Korea, Spain, Sweden,
+Switzerland, Thailand, Turkey, U.K., and the U.S.
 
--the U.S. industrial production index that measures the real output of all relevant establishments located in the U.S.;
--the Bank for International Settlement (BIS) effective exchange rate (EER) for the United States, i.e. a summary measure calculated by the BIS to account for changes in the U.S. bilateral exchange rate against other countries by their trade importance; 
--global inflows, defined as direct cross-border credit flows from the U.S. to the aforementioned countries' banks and non-bank recipients. This variable is key to explaining the degree of financial dependency of the rest of the world vis-à-vis the financial hegemon; 
--global domestic credit, another key variable in our VAR that outlines the total amount of funds in the world economy, including loans, debt instruments, and other forms of credit provided by financial institutions.
+As discussed in the previous section, we are ìncluding the variables of
+the global VAR of @miranda2020us. In the first graph, we include the
+following variables:
 
-In the second graph, we outline four types of leverage. First of all, leverage can be defined as the ratio between assets and equity, with equity being the difference between assets and debts. In finance, this measurement refers to the use of borrowed funds to finance assets or investments. Against this backdrop, the authors construct this variable as the ratio between claims in the private sector, i.e. credit extended by banks and other financial institutions to the private sector, and the sum of transferable deposits held by depository corporations, excluding central banks. This ratio reflects the proportion of credit extended to the private sector relative to deposits held by depository corporations, excluding central banks. A higher ratio suggests a higher banking leverage level. The authors differentiate between different leverages given financial agents' risk-taking behavior. As a matter of fact, we can observe that the leverage between EU global banks and US brokers and dealers is much larger than the leverage of big but not systemic EU and US banks. EU global banks include systematically important banks such as UBS and Unicredit. Global banks' leverage is high for several reasons such as size and risk appetite. Brokers and dealers' behavior can be explained by their risk-loving approach.
+-the U.S. industrial production index that measures the real output of
+all relevant establishments located in the U.S.; -the Bank for
+International Settlement (BIS) effective exchange rate (EER) for the
+United States, i.e. a summary measure calculated by the BIS to account
+for changes in the U.S. bilateral exchange rate against other countries
+by their trade importance; -global inflows, defined as direct
+cross-border credit flows from the U.S. to the aforementioned countries'
+banks and non-bank recipients. This variable is key to explaining the
+degree of financial dependency of the rest of the world vis-à-vis the
+financial hegemon; -global domestic credit, another key variable in our
+VAR that outlines the total amount of funds in the world economy,
+including loans, debt instruments, and other forms of credit provided by
+financial institutions.
 
-In the third graph, we include the FED policy rate coupled with the global real economic activity index (excluding the US). We can observe the lag effect of an increase in interest rates with a decrease in international economic activity. In the fourth graph we include the global factor discussed in the previous section, plotted with global risk aversion (one variable is the inverse of the other). The factor is rotated to provide an intuitive view that an increase in the factor (risk aversion) reflects an increase in world asset prices. Lastly, we plot the U.S. PCE deflator to measure changes in goods and services prices over time.
+In the second graph, we outline four types of leverage. First of all,
+leverage can be defined as the ratio between assets and equity, with
+equity being the difference between assets and debts. In finance, this
+measurement refers to the use of borrowed funds to finance assets or
+investments. Against this backdrop, the authors construct this variable
+as the ratio between claims in the private sector, i.e. credit extended
+by banks and other financial institutions to the private sector, and the
+sum of transferable deposits held by depository corporations, excluding
+central banks. This ratio reflects the proportion of credit extended to
+the private sector relative to deposits held by depository corporations,
+excluding central banks. A higher ratio suggests a higher banking
+leverage level. The authors differentiate between different leverages
+given financial agents' risk-taking behavior. As a matter of fact, we
+can observe that the leverage between EU global banks and US brokers and
+dealers is much larger than the leverage of big but not systemic EU and
+US banks. EU global banks include systematically important banks such as
+UBS and Unicredit. Global banks' leverage is high for several reasons
+such as size and risk appetite. Brokers and dealers' behavior can be
+explained by their risk-loving approach.
 
-Lastly, we will add the aforementioned instrument on top of the $y_t$ variable. In the next section we will provide the reason for this procedure.
+In the third graph, we include the FED policy rate coupled with the
+global real economic activity index (excluding the US). We can observe
+the lag effect of an increase in interest rates with a decrease in
+international economic activity. In the fourth graph we include the
+global factor discussed in the previous section, plotted with global
+risk aversion (one variable is the inverse of the other). The factor is
+rotated to provide an intuitive view that an increase in the factor
+(risk aversion) reflects an increase in world asset prices. Lastly, we
+plot the U.S. PCE deflator to measure changes in goods and services
+prices over time.
+
+Lastly, we will add the aforementioned instrument on top of the $y_t$
+variable. In the next section we will provide the reason for this
+procedure.
 
 ## Order of Integration of the Variables
 
-We run an augmented Dickey Fuller (ADF) test to determine the order of integration of our variables. The test rejects the null hypothesis that the variables are unit-root except for our instrument variable as expected. In order to provide more insight into the order of integration we re-run an ADF test with the first difference of the variables.
+We run an augmented Dickey Fuller (ADF) test to determine the order of
+integration of our variables. The test rejects the null hypothesis that
+the variables are unit-root except for our instrument variable as
+expected. In order to provide more insight into the order of integration
+we re-run an ADF test with the first difference of the variables.
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -314,7 +431,21 @@ We run an augmented Dickey Fuller (ADF) test to determine the order of integrati
 ## BVAR Framework
 
 From @HRW2022ProxySVARs we define the model as: $$
-y_t=B_0B_1y_{t-1}+...+B_0B_py_{t-p}+B_0\varepsilon_t, t=1,..,T $$ $$y_t=A_1y_{t-1}+...+A_py_{t-p}+u_t$$ where $A_j, : \left \{j=1,2,\dots,p\right \}$ where $A(L)=B_0B(L)$ are a K x K coefficient matrices, and L is the lag operator, and $u_t$ in the first reduced form is serially uncorrelated with zero mean and positive definite (non-diagonal) covariance matrix $\Sigma_u.$ The structural shocks $\varepsilon_t$ in the second reduced form are assumed to be mutually uncorrelated and normalised to have unit variance. $\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks are mapped to the reduced-form system through a K x K non-singular matrix $B_0$, such that $B_0^{-1}B_0^{-1'}=\Sigma_u$. For simplicity, the process is assumed to be causal and $detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for $\left| z \right|\le 1$. This ensures that the process has a Wold moving average MA representation. Moreover,
+y_t=B_0B_1y_{t-1}+...+B_0B_py_{t-p}+B_0\varepsilon_t, t=1,..,T $$
+$$y_t=A_1y_{t-1}+...+A_py_{t-p}+u_t$$ where
+$A_j, : \left \{j=1,2,\dots,p\right \}$ where $A(L)=B_0B(L)$ are a K x K
+coefficient matrices, and L is the lag operator, and $u_t$ in the first
+reduced form is serially uncorrelated with zero mean and positive
+definite (non-diagonal) covariance matrix $\Sigma_u.$ The structural
+shocks $\varepsilon_t$ in the second reduced form are assumed to be
+mutually uncorrelated and normalised to have unit variance.
+$\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks
+are mapped to the reduced-form system through a K x K non-singular
+matrix $B_0$, such that $B_0^{-1}B_0^{-1'}=\Sigma_u$. For simplicity,
+the process is assumed to be causal and
+$detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for
+$\left| z \right|\le 1$. This ensures that the process has a Wold moving
+average MA representation. Moreover,
 
 ```{=tex}
 \begin{align*}
@@ -337,16 +468,23 @@ $\Xi(\varepsilon{lt}z_t)=0, \forall l\:\epsilon\left \{1,\dots, K\right \}\setmi
 
 From these conditions, it follows that the population covariance between
 the instrument and VAR residuals obtain the k-th column if $B_0$,
+denoted by $B_{0k}$. \\end{gather} The second to last MA representation
+is of particular importance because the structural MA coefficients
+$\Theta_i=\Phi_iB_0$ cannot be recovered without a proper
+identification. We will briefly outline the Proxy SVAR approach. Let
+$z_t$ be an external instrument to identify the structural shock of
+interest $\varepsilon_{kt}, k\:\epsilon \: \left \{1,\dots, K\right \}$.
+$z_t$ has to satisfy the *relevant* condition
+$\Xi(\varepsilon_{kt}z_t)=\phi \neq 0$ and the *exogeneity* condition
+$\Xi(\varepsilon{lt}z_t)=0, \forall l\:\epsilon\left \{1,\dots, K\right \}\setminus\left \{k\right \}$.
+From these conditions, it follows that the population covariance between
+the instrument and VAR residuals obtains the k-th column of $B_0$,
 denoted by $B_{0k}$.
-\end{gather} The second to last MA representation is of particular importance because the structural MA coefficients $\Theta_i=\Phi_iB_0$ cannot be recovered without a proper identification. We will briefly outline the Proxy SVAR approach.
-Let $z_t$ be an external instrument to identify the structural shock of interest $\varepsilon_{kt}, k\:\epsilon \: \left \{1,\dots, K\right \}$. $z_t$ has to satisfy the *relevant* condition $\Xi(\varepsilon_{kt}z_t)=\phi \neq 0$ and the *exogeneity* condition $\Xi(\varepsilon{lt}z_t)=0, \forall l\:\epsilon\left \{1,\dots, K\right \}\setminus\left \{k\right \}$.
-From these conditions, it follows that the population covariance between the instrument and VAR residuals obtains the k-th column of $B_0$, denoted by $B_{0k}$.
 
 $$
 \Xi(u_tz_t) = B_{0,k} \\
 \Xi(\varepsilon{kt}z_t)=\phi B_{0,k}
-$$
-Moreover, let $\Pi$ denotes the $1$x$K$ coefficient vector from the
+$$ Moreover, let $\Pi$ denotes the $1$x$K$ coefficient vector from the
 regression of the instrument on the residual vector $u_t$ gives the
 shock $\varepsilon_{kt}$ up to a scale $\phi$.
 $\Pi u_t=\Xi(z_tu^{'}_t)\Sigma_{u}^{-1}u_t=\phi B^{'}_{0,k}\left [B_0B_0^{'} \right ]u_t=\phi e^{'}_t\varepsilon_{kt}$
@@ -355,9 +493,9 @@ and VAR impulse response function are equal up to a constant of
 proportionality, show that proxy SVARS impulse responses can be computed
 putting the instrument in the first row of the data vector $y_t$ in a
 SVAR framework. This result follows from the invertibility of
-$\varepsilon$ and two assumptions:
--the data $y_t$ is covariance-stationary;
--the data $y_t$ is a jointly Gaussian vector time series.
+$\varepsilon$ and two assumptions: -the data $y_t$ is
+covariance-stationary; -the data $y_t$ is a jointly Gaussian vector time
+series.
 
 In our Bayesian approach these requirements are met when we define the
 distributions of our error terms. We will outline them in the next
@@ -365,18 +503,23 @@ section.
 
 ## Basic Model
 
-We specify our model to follow a matrix-variate normal distribution \begin{gather}
+We specify our model to follow a matrix-variate normal distribution
+\begin{gather}
 Y = XA + E \\
 \\ E|X \sim MN_{T \times N}(0_{T \times N},\Sigma,I_T) 
-\end{gather} Given that the function Y is a linear combination of the error terms E, we can specify \begin{gather}
+\end{gather} Given that the function Y is a linear combination of the
+error terms E, we can specify \begin{gather}
 Y|X,A,\sim MN_{T \times N}(XA,\Sigma,I_T)
-\end{gather} Hence, the Likelihood function follows a Matrix-Variate-Normal form: \begin{gather}
+\end{gather} Hence, the Likelihood function follows a
+Matrix-Variate-Normal form: \begin{gather}
 L(A,\Sigma|Y,X) \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(Y-XA)'(Y-XA) \right] \right\} \\
 \\ \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(A-\hat{A})'X'X(A-\hat{A}) \right] \right\} exp \left\{-\frac{1}{2} tr \left[\Sigma^{-1}(Y-X \hat{A})'(Y-X \hat{A}) \right] \right\} \\
-\end{gather} where from Maximum Likelihood Estimation we have obtained \begin{gather}
+\end{gather} where from Maximum Likelihood Estimation we have obtained
+\begin{gather}
 \hat{A} = (X'X)^{-1}X'Y \\
 \\ \hat{\Sigma} = \frac{1}{T} (Y-X \hat{A})'(Y-X \hat{A})
-\end{gather} In the basic model, our prior follows a natural-conjugate prior distribution of the same form: \begin{gather}
+\end{gather} In the basic model, our prior follows a natural-conjugate
+prior distribution of the same form: \begin{gather}
 p(A,\Sigma) = p(A|\Sigma) p(\Sigma) \\
 \\ A|\Sigma \sim MN_{K \times N} (\underline{A}, \Sigma , \underline{V}) \\
 \\ \Sigma \sim IW_{N}(\underline{S},\underline{\nu})
@@ -387,7 +530,14 @@ With parameters: \begin{gather}
 \\ Var[vec(A)] = \Sigma \otimes  \underline{V} \\
 \\ \underline{V} = diag([\kappa_2 \quad \kappa_1 (p^{-2} \otimes I_N)]) \\
 \\ p = [1,2,...p]
-\end{gather} $\kappa_2$ and $\kappa_1$ describe, respectively, the priors of the overall shrinkage level of the constant term and the variance-covariance matrix of the autoregressive slopes for the constant term. We specify $\kappa_2=1$ and $\kappa_1=0.02$ to respect @MollerWolf2021LPVARS assumptions. We would not expect persistence in each lag for stationary variables following a random walk. Moreover, we set the prior of the autoregressive parameters $A$ equal to a vector of zeros. The resulting full conditional posterior is: \begin{gather}
+\end{gather} $\kappa_2$ and $\kappa_1$ describe, respectively, the
+priors of the overall shrinkage level of the constant term and the
+variance-covariance matrix of the autoregressive slopes for the constant
+term. We specify $\kappa_2=1$ and $\kappa_1=0.02$ to respect
+@MollerWolf2021LPVARS assumptions. We would not expect persistence in
+each lag for stationary variables following a random walk. Moreover, we
+set the prior of the autoregressive parameters $A$ equal to a vector of
+zeros. The resulting full conditional posterior is: \begin{gather}
 p(A,\Sigma|Y,X) = p(A|Y,X,\Sigma)p(\Sigma|Y,X) \\
 \\ p(A|Y,X,\Sigma) = MN_{K \times N}(\bar{A}, \Sigma, \bar{V}) \\ 
 \\ p(\Sigma | Y, X) = IW_N(\bar{S},\bar{\nu})
@@ -412,8 +562,8 @@ p(A,\Sigma|Y,X) \propto \\
 +1}{2}} \times exp\left\{ -\frac{1}{2} tr \left[ \Sigma^{-1} \left[ (A-\bar{A})^{'} \bar{V}^{-1} (A-\bar{A})+\underline{S} +Y^{'}Y + \underline{A}^{'} \underline{V}^{-1}\underline{A} -\bar{A}^{'} \bar{V}^{-1}\bar{A}\right]\right]\right\}
 \end{gather}
 ```
-
-where the full conditional posterior has the same natural-conjugate form of our prior:
+where the full conditional posterior has the same natural-conjugate form
+of our prior:
 
 ```{=tex}
 \begin{gather}
@@ -431,7 +581,12 @@ with posterior parameters:
 \\ \bar{S} = \underline{S} + Y^{'}Y +  \underline{A}^{'}\underline{V}^{-1}\underline{A} - \bar{A}^{'}\bar{V}^{-1}\bar{A}
 \end{gather}
 ```
-In order to compute our posterior parameters in R, we first specify values for our priors, then calculate the posteriors and draw $A$ and $\Sigma$ respectively from Matrix-Variate-normal and Inverse Wishart distributions. At this point, we can obtain our structural parameters through a Cholesky decomposition of our matrix $\Sigma$, namely with $\Sigma^{-1}=(B_0B_0^{'})$.
+In order to compute our posterior parameters in R, we first specify
+values for our priors, then calculate the posteriors and draw $A$ and
+$\Sigma$ respectively from Matrix-Variate-normal and Inverse Wishart
+distributions. At this point, we can obtain our structural parameters
+through a Cholesky decomposition of our matrix $\Sigma$, namely with
+$\Sigma^{-1}=(B_0B_0^{'})$.
 
 ```{r}
 #| echo: true 
@@ -486,8 +641,18 @@ In order to compute our posterior parameters in R, we first specify values for o
   return(results)
   }
 ```
+
 ## Extended Model
-In the extended model, we set hyperprior parameters for the autoregressive parameter $\kappa_A$ to follow an Inverse Gamma 2 distribution $IG2(\underline{S}_{\kappa},\underline{\nu}_{\kappa})$ and $\kappa_{\Sigma}$ hyperprior parameter for the variance-covariance matrix to follow a Gamma Distribution $G(\underline{S}_{\Sigma},\underline{a}_{\Sigma})$. We define a hierarchical model to provide flexibility to our model and hopefully reduce uncertainty. We will define the full conditional posterior of the hyperparameter $\kappa_A$ first.
+
+In the extended model, we set hyperprior parameters for the
+autoregressive parameter $\kappa_A$ to follow an Inverse Gamma 2
+distribution $IG2(\underline{S}_{\kappa},\underline{\nu}_{\kappa})$ and
+$\kappa_{\Sigma}$ hyperprior parameter for the variance-covariance
+matrix to follow a Gamma Distribution
+$G(\underline{S}_{\Sigma},\underline{a}_{\Sigma})$. We define a
+hierarchical model to provide flexibility to our model and hopefully
+reduce uncertainty. We will define the full conditional posterior of the
+hyperparameter $\kappa_A$ first.
 
 ```{=tex}
 \begin{gather}
@@ -506,7 +671,8 @@ where we recognise the kernel of an Inverse Gamma 2 Distribution with
 \\ \bar{\nu}_a = \underline{\nu}_a+NK
 \end{gather}
 ```
-In addition, we obtain a similar full conditional posterior of the hyperparameter $\kappa_{\Sigma}$. \begin{gather}
+In addition, we obtain a similar full conditional posterior of the
+hyperparameter $\kappa_{\Sigma}$. \begin{gather}
 p(\kappa_{\Sigma} | A,\Sigma, Y,X) \propto L(Y|X,A,\Sigma) \times p(\kappa_{\Sigma}) \times p(A|\Sigma,\kappa_A) \times p(\Sigma|\kappa_{\Sigma}) \times p(\kappa_A) \\
 \\ \propto p(\kappa_{\Sigma}) \times p(\Sigma|\kappa_{\Sigma}) \\ 
 \\ \propto (\kappa_{\Sigma})^{-\frac{\underline{\nu}N}{2}} 
@@ -531,19 +697,22 @@ We recognize kernel of matrix-normal inverse Wishart distribution, with
 parameters as follows: \begin{gather}
 \bar{V} = (X'X+(\kappa_a \underline{V}))^{-1} \\ 
 \\ \bar{A} = \bar{V}(X'Y+(\kappa_a \underline{V}^{-1}\underline{A})) \\ \\ \bar{S} = I_N\kappa_{\Sigma}+Y'Y+\underline{A}^{'}(\kappa_a \underline{V})^{-1}\underline{A} - \bar{A}^{'} \bar{V}^{-1}\bar{A} \\ 
-\end{gather} where we can recognise the kernel of an Gamma Distribution with \begin{gather}
+\end{gather} where we can recognise the kernel of an Gamma Distribution
+with \begin{gather}
 \bar{s}_{\Sigma} = {\left [2\left[tr\Sigma^{-1}\underline{s}_{\Sigma} \right ]^{-1}+\left[\underline{s}_{\Sigma} \right ]^{-1}\right ]^{-1}} \\
 \\ \bar{a}_{\Sigma} = \frac{N\underline{\nu}}{2}+\underline{a}_{\Sigma}
 \end{gather}
 
-Therefore, our new full conditional posterior distribution will be as follows: \begin{gather}
+Therefore, our new full conditional posterior distribution will be as
+follows: \begin{gather}
 p(A,\Sigma|X,Y,\kappa_A,\kappa_{\Sigma}) \propto L(A,\Sigma|Y,X) \times p(A|\Sigma,\kappa_A) \times p(\Sigma|\kappa_{\Sigma}) \\
 \\ \propto det(\Sigma)^{-\frac{K}{2}} exp \left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(Y-XA)^{'}(Y-XA)\right] \right\} \\
 \\ \times exp \left\{ -\frac{1}{2} tr \left[ \Sigma^{-1}(A-\underline{A})^{'}(\kappa_A \underline{V})^{-1}(A-\underline{A}) \right] \right\} \\
 \\ \times det(\Sigma)^{\frac{\underline{\nu}+N+1}{2}} exp\left\{-\frac{1}{2} tr \left[\Sigma^{-1}\kappa_{\Sigma} \right] \right\}
 \end{gather}
 
-We recognize the kernel of a matrix-normal inverse Wishart distribution, with parameters as follows: \begin{gather}
+We recognize the kernel of a matrix-normal inverse Wishart distribution,
+with parameters as follows: \begin{gather}
 \bar{V} = (X'X+(\kappa_A \underline{V}))^{-1} \\ 
 \\ \bar{A} = \bar{V}(X'Y+(\kappa_A \underline{V}^{-1}\underline{A})) \\ \\ \bar{S} = I_N\kappa_{\Sigma}+Y'Y+\underline{A}^{'}(\kappa_A \underline{V})^{-1}\underline{A} - \bar{A}^{'} \bar{V}^{-1}\bar{A} \\ 
 \\ \bar{\nu} = T + \underline{\nu}
@@ -551,32 +720,23 @@ We recognize the kernel of a matrix-normal inverse Wishart distribution, with pa
 
 ## Gibbs Sampler
 
-In order to reach our analytical solutions we use a Monte Carlo Markov
-Chain (MCMC) method, namely the Gibbs Sampler procedure. We generate
-random draws from the joint posterior distribution and we update them at
-each iteration to compute our posterior distribution parameters. In our
-case we exploit the following procedure: Initialize $\kappa_a$ and
-$\kappa_{\Sigma}$ at $\kappa_a^{(0)}$ and $\kappa^{(0)}_{\Sigma}$
+In order to reach our analytical solutions we use a Monte Carlo Markov Chain (MCMC) method, namely the Gibbs Sampler procedure. We generate random draws
+from the joint posterior distribution and update them at each iteration
+to compute our posterior distribution parameters. In our case we exploit
+the following procedure: Initialize $\kappa_A$ and $\kappa_{\Sigma}$ at
+$\kappa_A^{(0)}$ and $\kappa^{(0)}_{\Sigma}$.
 
 At each iteration s:
 
-1.  Draw \$ (A,\Sigma)\^{(s)} \sim p(A,\Sigma\|
-    X,Y,\kappa\*a\^{(s-1)},\* \kappa{\Sigma}\^{(s-1)}) \$
-2.  Draw $\kappa_a^{(s)} \sim p(\kappa_a|Y,X,A,\Sigma)$
+1.  Draw
+    $(A,\Sigma)^{(s)} \sim p(A,\Sigma\| X,Y,\kappa*a^{(s-1)},* \kappa{\Sigma}^{(s-1)})$
+2.  Draw $\kappa_A^{(s)} \sim p(\kappa_A|Y,X,A,\Sigma)$
 3.  Draw $\kappa_{\Sigma}^{(s)} \sim p(\kappa_{\Sigma}|Y,X,A,\Sigma)$
 
 Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$
 repetitions. Return the output as
 $\left \{ A^{(s)}, \Sigma^{(s)} \right \}^{S2}_{s=S1+1}$.
-In order to reach our analytical solutions we use a Monte Carlo Markov Chain (MCMC) method, namely the Gibbs Sampler procedure. We generate random draws from the joint posterior distribution and update them at each iteration to compute our posterior distribution parameters. In our case we exploit the following procedure: Initialize $\kappa_A$ and $\kappa_{\Sigma}$ at $\kappa_A^{(0)}$ and $\kappa^{(0)}_{\Sigma}$
 
-At each iteration s:
-
-1.  Draw $(A,\Sigma)^{(s)} \sim p(A,\Sigma\| X,Y,\kappa*a^{(s-1)},* \kappa{\Sigma}^{(s-1)})$
-2.  Draw $\kappa_A^{(s)} \sim p(\kappa_A|Y,X,A,\Sigma)$
-3.  Draw $\kappa_{\Sigma}^{(s)} \sim p(\kappa_{\Sigma}|Y,X,A,\Sigma)$
-
-Repeat steps 1 and 2 for $(S_1 + S_2)$ times. Discard the first $S_1$ repetitions. Return the output as $\left \{ A^{(s)}, \Sigma^{(s)} \right \}^{S2}_{s=S1+1}$.
 ```{r}
 #| echo: true 
 #| message: false
@@ -662,8 +822,12 @@ extended.model <- function(bigy, p, S1, S2){
 }
 
 ```
+
 ## Artificial Data
-We generate two random walks $y1$ and $y2$ with 1000 observations each simulated from a bivariate Gaussian random walk process. We plot the raw series and the first difference below:
+
+We generate two random walks $y1$ and $y2$ with 1000 observations each
+simulated from a bivariate Gaussian random walk process. We plot the raw
+series and the first difference below:
 
 ```{r}
 #| echo: true 
@@ -677,7 +841,12 @@ We generate two random walks $y1$ and $y2$ with 1000 observations each simulated
   y.art <- cbind(y1,y2)
   plot(diff(y.art), 1:1000, type = "l", main = "Artificial data first difference", ylab="", xlab="")
 ```
-Then, we use our two functions from the basic and extended model to simulate the intercept term posterior. We show in the plot that for 10 thousand draws we get an intercept close to zero for the $A_{1,1}$ and $A_{1,2}$ values. In addition, we get an identity matrix for the $B_{1,1}$ and $B_{2,2}$ values. Hence, the function works as we want.
+
+Then, we use our two functions from the basic and extended model to
+simulate the intercept term posterior. We show in the plot that for 10
+thousand draws we get an intercept close to zero for the $A_{1,1}$ and
+$A_{1,2}$ values. In addition, we get an identity matrix for the
+$B_{1,1}$ and $B_{2,2}$ values. Hence, the function works as we want.
 
 ```{r}
 #| echo: true 
@@ -707,7 +876,13 @@ Then, we use our two functions from the basic and extended model to simulate the
   plot(1:10000, A.extended[1,2,], type = "l", main = expression(paste("extended " , A[12])), lwd=0.4, ylab="", xlab="", col="tomato3")
 ```
 
-Moreover, we also plot the histograms of the values $\kappa_A$ and $\kappa_{\Sigma}$ outlining their mean value. We also add a vertical line to define the mean parameter for all draws. In our original function, we have set the $\kappa_{Sigma}$ initial value to 1 and the results from 20 thousand draws indicate that the posterior median is $\backsim0.04$. Similarly, we set the initial value of $\kappa_A$ to one and obtain a posterior distribution with a median $\sim 14.9$.
+Moreover, we also plot the histograms of the values $\kappa_A$ and
+$\kappa_{\Sigma}$ outlining their mean value. We also add a vertical
+line to define the mean parameter for all draws. In our original
+function, we have set the $\kappa_{Sigma}$ initial value to 1 and the
+results from 20 thousand draws indicate that the posterior median is
+$\backsim0.04$. Similarly, we set the initial value of $\kappa_A$ to one
+and obtain a posterior distribution with a median $\sim 14.9$.
 
 ```{r}
 #| echo: true 
@@ -722,12 +897,28 @@ Moreover, we also plot the histograms of the values $\kappa_A$ and $\kappa_{\Sig
   abline(v = mean(extended.artificial$k.sigma.convergence), col='purple4', lwd = 3)
 ```
 
-We plot the $\kappa$s parameters for the extended model using the @miranda2020us dataset. The authors present the results of their impulse response functions in percentage changes, so we assume they have log-transformed the data. Moreover, the authors state in the online appendix that the global factor and global risk aversion variables are computed using first-differenced log-priced series. To support our statement, a plot of first-differenced data provides percentage changes on the ordinate axes, similar to what we would expect from a plot of $log(y_{t})-log(y_{t-1})$. 
-Hence, we will compute our parameters of interest using first-differenced data except for our instrument variable with 20 thousand draws in our Gibbs Sampler. Our initial $\kappa_A$ value is $\sim 0.92$ and our initial $\kappa_{\Sigma}$ value is equal to 1. We can observe that the data changes significantly for the hyperprior parameter for the slope, but the same cannot be said for the variance-covariance hyperprior. After some tuning of the Inverse-Gamma2 and Gamma distribution priors for the $/kappa_A$ and the $/kappa_[Sigma]$ we found the following optimal values:
+We plot the $\kappa$s parameters for the extended model using the
+@miranda2020us dataset. The authors present the results of their impulse
+response functions in percentage changes, so we assume they have
+log-transformed the data. Moreover, the authors state in the online
+appendix that the global factor and global risk aversion variables are
+computed using first-differenced log-priced series. To support our
+statement, a plot of first-differenced data provides percentage changes
+on the ordinate axes, similar to what we would expect from a plot of
+$log(y_{t})-log(y_{t-1})$. Hence, we will compute our parameters of
+interest using first-differenced data except for our instrument variable
+with 20 thousand draws in our Gibbs Sampler. Our initial $\kappa_A$
+value is $\sim 0.92$ and our initial $\kappa_{\Sigma}$ value is equal
+to 1. We can observe that the data changes significantly for the
+hyperprior parameter for the slope, but the same cannot be said for the
+variance-covariance hyperprior. After some tuning of the Inverse-Gamma2
+and Gamma distribution priors for the $/kappa_A$ and the
+$/kappa_[Sigma]$ we found the following optimal values:
 $$ \underline{S}_A=0.5\\ 
    \underline{\nu}_A=3\\
    \underline{s}_{\Sigma}=0.01\\
    \underline{a}_{\Sigma}=1$$
+
 ```{r}
 #| echo: false 
 #| message: false
@@ -748,6 +939,7 @@ $$ \underline{S}_A=0.5\\
     eubanksl)
   y         <- window((y), start=c(1990,2), end=c(2010,12))
 ```
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -764,13 +956,22 @@ $$ \underline{S}_A=0.5\\
 
 ## Impulse Response Functions
 
-The impulse response functions are the dynamic causal effects of the underlying shocks $u_t$ on the economic measurements $y_t$.
-Our model features the instrument in the first position. We will compute impulse response functions (IRFs) assuming that the instrument affects all the other variables exogenously. We define an IRF as a shock of the first variable in $u_t$ (the instrument) on the 14 variables $n$ of our model in $Y_t$ at time $t$ until time $t+i$. In our case $i=24$ because we want to study the IRFs for two years as the original paper authors do. Compactly, we can describe the computations as follows:
-\begin{gather}
+The impulse response functions are the dynamic causal effects of the
+underlying shocks $u_t$ on the economic measurements $y_t$. Our model
+features the instrument in the first position. We will compute impulse
+response functions (IRFs) assuming that the instrument affects all the
+other variables exogenously. We define an IRF as a shock of the first
+variable in $u_t$ (the instrument) on the 14 variables $n$ of our model
+in $Y_t$ at time $t$ until time $t+i$. In our case $i=24$ because we
+want to study the IRFs for two years as the original paper authors do.
+Compactly, we can describe the computations as follows: \begin{gather}
 \frac{\partial y_{n.t+1}}{\partial u_{1.t}}=\theta_{nj.i}
-\end{gather}
-@MollerWolf2021LPVARS assumption regarding the invertibility of $\varepsilon$ is satisfied given our Cholesky decomposition: 
-$$\begin{bmatrix}
+\end{gather} @MollerWolf2021LPVARS assumption regarding the
+invertibility of $\varepsilon$ is satisfied given our Cholesky
+decomposition:
+
+$$
+\begin{bmatrix}
 b_0^{1,1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 b_0^{2,1} & b_0^{2,2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 b_0^{3,1} & b_0^{3,2} & b_0^{3,3} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -801,19 +1002,40 @@ b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_
 \text{Lev. EU G. Banks} \\
 \text{Lev. US Banks} \\
 \text{Lev. EU Banks} \\
-\end{bmatrix}$$
-### IRFs Basic Model
-We will outline IRFs for both our basic and extended models, computing 20 thousand draws for our estimates. @miranda2020us normalize the IRFs so that the Treasury rate has a percentage point increase at horizon 0, but we do not include this normalization. Because of this, we cannot interpret the degree of shock as the authors do.
-From the 14 variables, we present only ten of them. We abstain from plotting the global factor because it is simply computed as the inverse of global risk aversion. In addition, we do not plot US brokers & dealers' leverage and US banks’ leverage. This is because our main interests lies in spillovers of monetary policy outside the US. The abscissa scale is in months, given that we use monthly variables, and display the 68% and 90% density intervals.
-Out of the ten IRF plots, half coincide with the authors' results. We will briefly outline the results.
--Upon realisation, the one-year Treasury rate spikes in the first quarter, decreases in the third quarter and then hovers around zero in the remaining lags;
--we would expect the PCE deflator to shrink, but it provides insignificant results in the first two quarters and increases thereafter;
--industrial production shrinks in the first three quarters, and then mean-reverts but in insignificant bands;
--global real production excluding the financial hegemon provides insignificant results in the first two lags and then increases, similarly to global inflows;
--the BIS real effective exchange rate increases upon realisation as expected following the monetary policy shock, decreasing from the second quarter onwards;
--global risk aversion - the proxy for global risky asset prices - spikes and hoovers around zero from the third quarter;
--global credit excluding the US decreases as expected in the first two quarters and then increases thereafter;
--the leverage drop immediately, but contrary to the original paper it does not mean-revert in the first quarter, and EU banks' leverage provides insignificant results;
+\end{bmatrix}
+$$
+## IRFs Basic Model
+
+We will outline IRFs for both our basic and extended models, computing
+20 thousand draws for our estimates. @miranda2020us normalize the IRFs
+so that the Treasury rate has a percentage point increase at horizon 0,
+but we do not include this normalization. Because of this, we cannot
+interpret the degree of shock as the authors do. From the 14 variables,
+we present only ten of them. We abstain from plotting the global factor
+because it is simply computed as the inverse of global risk aversion. In
+addition, we do not plot US brokers & dealers' leverage and US banks'
+leverage. This is because our main interests lies in spillovers of
+monetary policy outside the US. The abscissa scale is in months, given
+that we use monthly variables, and display the 68% and 90% density
+intervals. Out of the ten IRF plots, half coincide with the authors'
+results. We will briefly outline the results. -Upon realisation, the
+one-year Treasury rate spikes in the first quarter, decreases in the
+third quarter and then hovers around zero in the remaining lags; -we
+would expect the PCE deflator to shrink, but it provides insignificant
+results in the first two quarters and increases thereafter; -industrial
+production shrinks in the first three quarters, and then mean-reverts
+but in insignificant bands; -global real production excluding the
+financial hegemon provides insignificant results in the first two lags
+and then increases, similarly to global inflows; -the BIS real effective
+exchange rate increases upon realisation as expected following the
+monetary policy shock, decreasing from the second quarter onwards;
+-global risk aversion - the proxy for global risky asset prices - spikes
+and hoovers around zero from the third quarter; -global credit excluding
+the US decreases as expected in the first two quarters and then
+increases thereafter; -the leverage drop immediately, but contrary to
+the original paper it does not mean-revert in the first quarter, and EU
+banks' leverage provides insignificant results;
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -893,9 +1115,21 @@ Out of the ten IRF plots, half coincide with the authors' results. We will brief
   }
   
 ```
+
 ### FEVD Basic Model
-Moreover, we include forecast error variance decomposition (FEVD) of two variables, i.e. EU Global banks' leverage, and EU big but systemic banks leverage.
-FEVD provide the information of how much each variable contributes to the information of the other variables' forecast variability at each horizon. We can observe that the FEVD for Global banks the other variables account significantly for the aforementioned information at further horizons. As a matter of fact, the information provided by the variable of interest contributes for only 13% at the last horizon. The larger contributors at the last horizon are the leverage of US and EU global but not systematically important banks (>40%).
+
+Moreover, we include forecast error variance decomposition (FEVD) of two
+variables, i.e. EU Global banks' leverage, and EU big but systemic banks
+leverage. FEVD provide the information of how much each variable
+contributes to the information of the other variables' forecast
+variability at each horizon. We can observe that the FEVD for Global
+banks the other variables account significantly for the aforementioned
+information at further horizons. As a matter of fact, the information
+provided by the variable of interest contributes for only 13% at the
+last horizon. The larger contributors at the last horizon are the
+leverage of US and EU global but not systematically important banks
+(\>40%).
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -921,7 +1155,12 @@ FEVD provide the information of how much each variable contributes to the inform
   }  
   axis(4,(0.5*(fevd.eubdlev[1:14,25]+fevd.eubdlev[2:15,25]))[c(2,14)], c("Treasury rate","EUBANKSL"),cex.axis=0.6)
 ```
-In addition, similar conclusions can be drawn to the FEVD of EU big but systematic banks' leverage. The information provided by the variable of interest contributes for 12% at the last horizon. Other larger contributors at the last horizon are Leverage for EU global banks and US banks.
+
+In addition, similar conclusions can be drawn to the FEVD of EU big but
+systematic banks' leverage. The information provided by the variable of
+interest contributes for 12% at the last horizon. Other larger
+contributors at the last horizon are Leverage for EU global banks and US
+banks.
 
 ```{r}
 #| echo: true 
@@ -944,8 +1183,21 @@ In addition, similar conclusions can be drawn to the FEVD of EU big but systemat
   }
   axis(4,(0.5*(fevd.eulev[1:14,25]+fevd.eulev[2:15,25]))[c(2,13)], c("Treasury rate","Leverage US Banks"),cex.axis=0.6)
 ```
+
 ### IRFs Extended Model
-Regarding the extended model, the IRFs are not in line with previous results or expectations. This is except for EU global banks' leverage and the BIS effective exchange rate. We have worked on tuning different parameters for the $\kappa_A$ and $\kappa_{\Sigma}$ hyperpriors, but unfortunately we still have to identify the drivers of these results. The IRFs of these variables provide insightful results only in the first 4-8 lags, but at further points the outcome is insignificant. One solution could be to implement a grid-search of different parameters for the hyperpriors prior parameters in the Gamma and Inverse-Gamma2 distributions, but time and computation power constraints prevent us from performing such exercise.
+
+Regarding the extended model, the IRFs are not in line with previous
+results or expectations. This is except for EU global banks' leverage
+and the BIS effective exchange rate. We have worked on tuning different
+parameters for the $\kappa_A$ and $\kappa_{\Sigma}$ hyperpriors, but
+unfortunately we still have to identify the drivers of these results.
+The IRFs of these variables provide insightful results only in the first
+4-8 lags, but at further points the outcome is insignificant. One
+solution could be to implement a grid-search of different parameters for
+the hyperpriors prior parameters in the Gamma and Inverse-Gamma2
+distributions, but time and computation power constraints prevent us
+from performing such exercise.
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -1017,8 +1269,13 @@ Regarding the extended model, the IRFs are not in line with previous results or 
     }
   }
 ```
+
 ### FEVD Extended Model
-We also plot the same FEVD of the same variables of the previous section. Differenyly from IRFs, the extended model FEVDs are almost identical to the ones of the basic model.
+
+We also plot the same FEVD of the same variables of the previous
+section. Differenyly from IRFs, the extended model FEVDs are almost
+identical to the ones of the basic model.
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -1038,6 +1295,7 @@ We also plot the same FEVD of the same variables of the previous section. Differ
   }  
   axis(4,(0.5*(fevd.eubdlev2[1:14,25]+fevd.eubdlev2[2:15,25]))[c(2,14)], c("Treasury rate","EUBANKSL"),cex.axis=0.6)
 ```
+
 ```{r}
 #| echo: true 
 #| message: false
@@ -1058,5 +1316,6 @@ We also plot the same FEVD of the same variables of the previous section. Differ
   }  
   axis(4,(0.5*(fevd.eulev2[1:14,25]+fevd.eulev2[2:15,25]))[c(2,13)], c("Treasury rate","Leverage US Banks"),cex.axis=0.6)
 ```
+
 # References
 :::
