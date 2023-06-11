@@ -966,7 +966,7 @@ Compactly, we can describe the computations as follows: \begin{gather}
 \end{gather} @MollerWolf2021LPVARS assumption regarding the
 invertibility of $\varepsilon$ is satisfied given our Cholesky
 decomposition:
-```{=tex}
+$$
 \begin{bmatrix}
 b_0^{1,1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 b_0^{2,1} & b_0^{2,2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -999,7 +999,7 @@ b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_
 \text{Lev. US Banks} \\
 \text{Lev. EU Banks} \\
 \end{bmatrix}
-```
+$$
 
 ### IRFs Basic Model
 
