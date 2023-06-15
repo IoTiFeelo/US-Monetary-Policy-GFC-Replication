@@ -168,6 +168,9 @@ global factor will be used later in the impulse-response section.
 #| warning: false
 #| code-fold: true
 #| code-summary: "Global Factors Plot"
+#| label: fig-global-factors
+#| fig-cap: "Development in the global factors"
+  
 ggplot() + 
   geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1975-2010`, linetype = "GF 1975-2010"), color ="blue", na.rm = TRUE, linewidth=1.2) + 
   geom_line(data = gf, aes(x = `...1`, y = `GLOBAL FACTOR 1990-2012`, linetype = "GF 1990-2012"), color="purple", na.rm = TRUE, linewidth=1.2) +
@@ -238,6 +241,8 @@ variables:
 #| warning: false
 #| code-fold: true
 #| code-summary: "Data Plots"
+#| label: fig-data-plots1
+#| fig-cap: "Data plots"
   library(ggplot2)
   library(patchwork)
   ############################################################
@@ -398,6 +403,8 @@ we re-run an ADF test with the first difference of the variables.
 #| warning: false
 #| code-fold: true
 #| code-summary: "ADF-tests"
+#| label: tbl-ADF
+#| tbl-cap: "ADF Tests"
   library(tseries)
   adf <- as.data.frame(matrix(nrow=14,ncol=3,NA))
   rownames(adf) <- colnames(y[1:14])
@@ -443,7 +450,7 @@ $\Xi\left(\varepsilon_t \varepsilon_t' \right)=I_K$. Structural shocks
 are mapped to the reduced-form system through a K x K non-singular
 matrix $B_0$, such that $B_0^{-1}B_0^{-1'}=\Sigma_u$. For simplicity,
 the process is assumed to be causal and
-$detA(z)=det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for
+$\det A(z)=\det(I_k-\sum_{j=1}^{p}A_jz^{j})\neq 0$ for
 $\left| z \right|\le 1$. This ensures that the process has a Wold moving
 average MA representation. Moreover,
 
@@ -512,8 +519,8 @@ error terms E, we can specify \begin{gather}
 Y|X,A,\sim MN_{T \times N}(XA,\Sigma,I_T)
 \end{gather} Hence, the Likelihood function follows a
 Matrix-Variate-Normal form: \begin{gather}
-L(A,\Sigma|Y,X) \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(Y-XA)'(Y-XA) \right] \right\} \\
-\\ \propto det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(A-\hat{A})'X'X(A-\hat{A}) \right] \right\} exp \left\{-\frac{1}{2} tr \left[\Sigma^{-1}(Y-X \hat{A})'(Y-X \hat{A}) \right] \right\} \\
+L(A,\Sigma|Y,X) \propto \det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(Y-XA)'(Y-XA) \right] \right\} \\
+\\ \propto \det(\Sigma)^{-\frac{T}{2}} exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(A-\hat{A})'X'X(A-\hat{A}) \right] \right\} exp \left\{-\frac{1}{2} tr \left[\Sigma^{-1}(Y-X \hat{A})'(Y-X \hat{A}) \right] \right\} \\
 \end{gather} where from Maximum Likelihood Estimation we have obtained
 \begin{gather}
 \hat{A} = (X'X)^{-1}X'Y \\
@@ -546,9 +553,9 @@ p(A,\Sigma|Y,X) = p(A|Y,X,\Sigma)p(\Sigma|Y,X) \\
 We can derive the full conditional posterior: \begin{gather}
 P(A,\Sigma|Y,X) \propto L(A,\Sigma|Y,X)p(A,\Sigma) \\
 \\ \propto L(A,\Sigma|Y,X)p(A|\Sigma)p(\Sigma) \\
-\\ det(\Sigma)^{-\frac{T}{2}} \times exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(A-\hat{A})' X'X (A-\hat{A})\right] \right\} \\
+\\ \det(\Sigma)^{-\frac{T}{2}} \times exp \left\{-\frac{1}{2} tr \left[ \Sigma^{-1}(A-\hat{A})' X'X (A-\hat{A})\right] \right\} \\
 \\ \times exp\left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(Y-X\hat{A})'(Y-X\hat{A}) \right] \right\} \\
-\\ \times det(\Sigma)^{-\frac{N+K+\underline{\nu}+1}{2}} \\
+\\ \times \det(\Sigma)^{-\frac{N+K+\underline{\nu}+1}{2}} \\
 \\ \times exp\left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(A-\underline{A})'\underline{V}^{-1}(A-\underline{A}) \right] \right\} \\ 
 \\ \times exp \left\{ -\frac{1}{2} tr \left[ \Sigma^{-1} \underline{S} \right] \right\}
 \end{gather}
@@ -558,7 +565,7 @@ After some calculations:
 ```{=tex}
 \begin{gather}\\
 p(A,\Sigma|Y,X) \propto \\
-\\ det{(\Sigma)}^{-\frac{T+N+K+ \underline{\nu}
+\\ \det{(\Sigma)}^{-\frac{T+N+K+ \underline{\nu}
 +1}{2}} \times exp\left\{ -\frac{1}{2} tr \left[ \Sigma^{-1} \left[ (A-\bar{A})^{'} \bar{V}^{-1} (A-\bar{A})+\underline{S} +Y^{'}Y + \underline{A}^{'} \underline{V}^{-1}\underline{A} -\bar{A}^{'} \bar{V}^{-1}\bar{A}\right]\right]\right\}
 \end{gather}
 ```
@@ -659,7 +666,7 @@ hyperparameter $\kappa_A$ first.
 p(\kappa_A | A,\Sigma, Y,X) \propto L(Y|X,A,\Sigma) \times p(\kappa_A) \times p(A|\Sigma,\kappa_A) \times p(\Sigma|\kappa_A) \\ 
 \\ \propto p(\kappa_A) \times p(A|\Sigma,\kappa_A) \\ 
 \\ \propto (\kappa_A)^{-\frac{\underline{\nu_a}+2}{2}} 
-exp\left\{ -\frac{1}{2} \frac{\underline{S_a}}{\kappa_A} \right\}  \times exp\left\{-\frac{1}{2}tr\left[\Sigma^{-1}(A-\underline{A_{\kappa}})^{'} \frac{1}{\kappa}(\underline{V_{\kappa}})^{-1} (A-\underline{A})\right]\right\} \times det(\kappa_A \underline{V})^{-\frac{N}{2}} \\ 
+exp\left\{ -\frac{1}{2} \frac{\underline{S_a}}{\kappa_A} \right\}  \times exp\left\{-\frac{1}{2}tr\left[\Sigma^{-1}(A-\underline{A_{\kappa}})^{'} \frac{1}{\kappa}(\underline{V_{\kappa}})^{-1} (A-\underline{A})\right]\right\} \times \det(\kappa_A \underline{V})^{-\frac{N}{2}} \\ 
 \\ \propto (\kappa_A)^{-\frac{\underline{\nu_a}_{\kappa_A}+2+NK}{2}} exp \left\{-\frac{1}{2} \frac{1}{\kappa_A} \left[\underline{S_a}_{\kappa_A} + tr \left[\Sigma^{-1}(A-\underline{A})^{'}\underline{V}^{-1}(A-\underline{A}) \right]\right] \right\}
 \end{gather}
 ```
@@ -688,9 +695,9 @@ Therefore, our new full conditional posterior distribution will be as
 following: The full conditional posterior of $(A,\Sigma)$ is:
 \begin{gather}
 p(A,\Sigma|X,Y,\kappa_a,\kappa_{\Sigma}) \propto L(A,\Sigma|Y,X) \times p(A|\Sigma,\kappa_a) \times p(\Sigma|\kappa_{\Sigma}) \\
-\\ \propto det(\Sigma)^{-\frac{K}{2}} exp \left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(Y-XA)^{'}(Y-XA)\right] \right\} \\
+\\ \propto \det(\Sigma)^{-\frac{K}{2}} exp \left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(Y-XA)^{'}(Y-XA)\right] \right\} \\
 \\ \times exp \left\{ -\frac{1}{2} tr \left[ \Sigma^{-1}(A-\underline{A})^{'}(\kappa_a \underline{V})^{-1}(A-\underline{A}) \right] \right\} \\
-\\ \times det(\Sigma)^{\frac{\underline{\nu}+N+1}{2}} exp\left\{-\frac{1}{2} tr \left[\Sigma^{-1}\kappa_{\Sigma} \right] \right\}
+\\ \times \det(\Sigma)^{\frac{\underline{\nu}+N+1}{2}} exp\left\{-\frac{1}{2} tr \left[\Sigma^{-1}\kappa_{\Sigma} \right] \right\}
 \end{gather}
 
 We recognize kernel of matrix-normal inverse Wishart distribution, with
@@ -706,9 +713,9 @@ with \begin{gather}
 Therefore, our new full conditional posterior distribution will be as
 follows: \begin{gather}
 p(A,\Sigma|X,Y,\kappa_A,\kappa_{\Sigma}) \propto L(A,\Sigma|Y,X) \times p(A|\Sigma,\kappa_A) \times p(\Sigma|\kappa_{\Sigma}) \\
-\\ \propto det(\Sigma)^{-\frac{K}{2}} exp \left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(Y-XA)^{'}(Y-XA)\right] \right\} \\
+\\ \propto \det(\Sigma)^{-\frac{K}{2}} exp \left\{-\frac{1}{2}tr \left[ \Sigma^{-1}(Y-XA)^{'}(Y-XA)\right] \right\} \\
 \\ \times exp \left\{ -\frac{1}{2} tr \left[ \Sigma^{-1}(A-\underline{A})^{'}(\kappa_A \underline{V})^{-1}(A-\underline{A}) \right] \right\} \\
-\\ \times det(\Sigma)^{\frac{\underline{\nu}+N+1}{2}} exp\left\{-\frac{1}{2} tr \left[\Sigma^{-1}\kappa_{\Sigma} \right] \right\}
+\\ \times \det(\Sigma)^{\frac{\underline{\nu}+N+1}{2}} exp\left\{-\frac{1}{2} tr \left[\Sigma^{-1}\kappa_{\Sigma} \right] \right\}
 \end{gather}
 
 We recognize the kernel of a matrix-normal inverse Wishart distribution,
@@ -835,6 +842,8 @@ series and the first difference below:
 #| warning: false
 #| code-fold: true
 #| code-summary: "Artificial Data"
+#| label: fig-artificial
+#| fig-cap: "Plots of artificial data"
   set.seed(420)
   y1 <- ts(cumsum(rnorm(1000, 0, sd=1)))
   y2 <- ts(cumsum(rnorm(1000, 0, sd=1)))
@@ -854,6 +863,8 @@ $B_{1,1}$ and $B_{2,2}$ values. Hence, the function works as we want.
 #| warning: false
 #| code-fold: true
 #| code-summary: "Artificial Data Results"
+#| label: fig-artificial-results
+#| fig-cap: "Artificial Data Results"
   set.seed(420)
   basic.artificial <- basic.model(y.art, 1, 10000, c(), c())
   extended.artificial <- extended.model(y.art, 1, 1000, 9000)
@@ -887,6 +898,8 @@ and obtain a posterior distribution with a median $\sim 14.9$.
 #| warning: false
 #| code-fold: true
 #| code-summary: "Kappas Histograms Artifical Data"
+#| label: fig-artificial-histogram
+#| fig-cap: "Kappas Histograms Artificial Data"
   par(mfrow=c(1,2),mar=c(2,2,2,2))
   hist(extended.artificial$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[A])), border=F, xlim=c(0,30))
   abline(v = mean(extended.artificial$k.a.convergence), col='purple4', lwd = 2)
@@ -909,8 +922,8 @@ value is $\sim 0.92$ and our initial $\kappa_{\Sigma}$ value is equal
 to 1. We can observe that the data changes significantly for the
 hyperprior parameter for the slope, but the same cannot be said for the
 variance-covariance hyperprior. After some tuning of the Inverse-Gamma2
-and Gamma distribution priors for the $/kappa_A$ and the
-$/kappa_[Sigma]$ we found the following optimal values:
+and Gamma distribution priors for the $\kappa_A$ and the
+$\kappa_[Sigma]$ we found the following optimal values:
 $$ \underline{S}_A=0.5\\ 
    \underline{\nu}_A=3\\
    \underline{s}_{\Sigma}=0.01\\
@@ -943,6 +956,8 @@ $$ \underline{S}_A=0.5\\
 #| warning: false
 #| code-fold: true
 #| code-summary: "Kappas Histograms Extended Model"
+#| label: fig-artificial-histogram-extended
+#| fig-cap: "Kappas Histograms Extended Model"
   extended.results       <- extended.model(y, 4, 500, 20000)
   par(mfrow=c(1,2),mar=c(2,2,2,2))
   hist(extended.results$k.a.convergence, breaks="Freedman-Diaconis", col='tomato3', main = expression(paste("Slope Hyperparameter ", kappa[A])), border=F, xlim=c(12,22.5))
@@ -966,7 +981,7 @@ Compactly, we can describe the computations as follows: \begin{gather}
 \end{gather} @MollerWolf2021LPVARS assumption regarding the
 invertibility of $\varepsilon$ is satisfied given our Cholesky
 decomposition:
-$$
+\[
 \begin{bmatrix}
 b_0^{1,1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 b_0^{2,1} & b_0^{2,2} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -984,22 +999,22 @@ b_0^{13,1} & b_0^{13,2} & b_0^{13,3} & b_0^{13,4} & b_0^{13,5} & b_0^{13,6} & b_
 b_0^{14,1} & b_0^{14,2} & b_0^{14,3} & b_0^{14,4} & b_0^{14,5} & b_0^{14,6} & b_0^{14,7} & b_0^{14,8} & b_0^{14,9} & b_0^{14,10} & b_0^{14,11} & b_0^{14,12} & b_0^{14,13} & b_0^{14,14} \\
 \end{bmatrix}
 \begin{bmatrix}
-\text{Instrument} \\
-\text{1Y Treasury Rate} \\
-\text{PCE Deflator} \\
-\text{Ind. Prod.} \\
-\text{G. Prod. ex US} \\
-\text{G. Inflows} \\
-\text{BIS EER} \\
-\text{G. Factor} \\
-\text{G. Risk Aversion} \\
-\text{G. Cred. ex US} \\
-\text{Lev. US B&D} \\
-\text{Lev. EU G. Banks} \\
-\text{Lev. US Banks} \\
-\text{Lev. EU Banks} \\
+\text{instrument} \\
+\text{pce} \\
+\text{indpro} \\
+\text{greaexus} \\
+\text{glbinflows} \\
+\text{dgs1} \\
+\text{bis} \\
+\text{globalf} \\
+\text{globalra} \\
+\text{glbcrexus} \\
+\text{usbdlev} \\
+\text{eubdlev} \\
+\text{usbanksl} \\
+\text{eubanksl} \\
 \end{bmatrix}
-$$
+\]
 
 ### IRFs Basic Model
 
@@ -1039,6 +1054,8 @@ banks' leverage provides insignificant results;
 #| warning: false
 #| code-fold: true
 #| code-summary: "IRFs Basic Model"
+#| label: fig-irf-basic
+#| fig-cap: "IRFs Basic Model"
   # Impulse response functions basic model
   # Forecast Error Variance Decomposition
   ###########################################################
@@ -1133,6 +1150,8 @@ leverage of US and EU global but not systematically important banks
 #| warning: false
 #| code-fold: true
 #| code-summary: "FEVD Basic Model for EU Global banks' leverage"
+#| label: fig-fevd-basic
+#| fig-cap: "FEVD Basic Model for EU Global banks' leverage"
   # colours for FEVDs
   ############################################################
   colours = c("deepskyblue1","deepskyblue2","deepskyblue","deepskyblue3","deepskyblue4","dodgerblue",
@@ -1165,6 +1184,8 @@ banks.
 #| warning: false
 #| code-fold: true
 #| code-summary: "FEVD Basic Model for EU banks' leverage"
+#| label: fig-fevd-basic1
+#| fig-cap: "FEVD Basic Model for EU banks' leverage"
   # plot FEVDs for EU banks' leverage
   ############################################################
   fevd.eulev  = apply(FEVD.posterior[14,,,],1:2,mean) #real gdp
@@ -1201,6 +1222,9 @@ from performing such exercise.
 #| warning: false
 #| code-fold: true
 #| code-summary: "IRFs Extended Model"
+#| label: fig-irf-extended
+#| fig-cap: "IRFs Extended Model"
+
   # Extended model Impulse response functions
   # Forecast Error Variance Decomposition
   ###########################################################
@@ -1279,6 +1303,8 @@ identical to the ones of the basic model.
 #| warning: false
 #| code-fold: true
 #| code-summary: "FEVD Extended Model for EU Global banks' leverage"
+#| label: fig-fevd-extended1
+#| fig-cap: "FEVD Extended Model for EU Global banks' leverage" 
   # plot FEVDs for EU Global Banks' leverage
   ############################################################
   fevd.eubdlev2  = apply(FEVD.posterior2[12,,,],1:2,mean)
@@ -1299,6 +1325,8 @@ identical to the ones of the basic model.
 #| warning: false
 #| code-fold: true
 #| code-summary: "FEVD Extended Model for EU banks' leverage"
+#| label: fig-fevd-extended2
+#| fig-cap: "FEVD Extended Model for EU banks' leverage"
   # plot FEVDs for EU banks' leverage
   ############################################################
   fevd.eulev2  = apply(FEVD.posterior2[14,,,],1:2,mean) #real gdp
